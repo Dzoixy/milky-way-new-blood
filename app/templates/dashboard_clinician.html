@@ -1,21 +1,32 @@
 {% extends "base.html" %}
 {% block content %}
-<section>
-    <h2>Clinician Dashboard</h2>
 
-    <form>
-        <input type="text" placeholder="Search patient">
-        <button>Search</button>
-        <button>Add New Patient</button>
-    </form>
+<div class="dashboard">
 
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Last Visit</th>
-            <th>Risk</th>
-            <th>Action</th>
-        </tr>
-    </table>
-</section>
+    <h2 class="section-title">CLINICIAN DASHBOARD</h2>
+
+    <div class="card-grid">
+
+        <div class="feature-card">
+            <h3>New Assessment</h3>
+            <p>Create a new patient assessment and generate prediction.</p>
+            <a href="/new_assessment" class="btn-outline">OPEN</a>
+        </div>
+
+        <div class="feature-card">
+            <h3>Patient Records</h3>
+            <p>View existing clinical records and previous results.</p>
+            <a href="/records" class="btn-outline">VIEW</a>
+        </div>
+
+        <div class="feature-card">
+            <h3>System Overview</h3>
+            <p>Model details and clinical decision information.</p>
+            <a href="/system_info" class="btn-outline">DETAILS</a>
+        </div>
+
+    </div>
+
+</div>
+
 {% endblock %}
