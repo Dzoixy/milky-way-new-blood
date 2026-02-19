@@ -10,8 +10,11 @@
 <body>
 
 <div class="page" id="page-clinician-dashboard">
+
+  <!-- ===== HEADER (ต้องอยู่บนสุดเสมอ) ===== -->
   <header class="site-header">
     <div class="header-inner">
+
       <div class="header-brand">
         <div class="brand-name">MILKY WAY</div>
         <div class="brand-sub">Clinical DSS</div>
@@ -24,14 +27,16 @@
 
       <div class="header-user">
         <div>
-          <div class="user-role">Clinician</div>
+          <div class="user-role">CLINICIAN</div>
           <div class="user-name">Dr. Smith</div>
         </div>
         <a href="/logout" class="logout-btn">Log Out</a>
       </div>
+
     </div>
   </header>
 
+  <!-- ===== MAIN CONTENT ===== -->
   <main class="site-main">
 
     <div class="pg-header">
@@ -44,6 +49,23 @@
       </div>
     </div>
 
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- ===== PATIENT SEARCH ===== -->
+    <div class="section">
+      <div class="section-header">
+        <span>PATIENT SEARCH</span>
+      </div>
+
+      <div class="search-row">
+        <input type="text" placeholder="Search by name or National ID...">
+        <button class="btn-black">SEARCH</button>
+        <button class="btn-outline">CLEAR</button>
+      </div>
+    </div>
+
+    <!-- ===== PATIENT LIST ===== -->
     <div class="panel">
       <div class="panel-head">
         <span class="panel-title">Patient List</span>
@@ -90,6 +112,7 @@
       </div>
     </div>
 
+    <!-- ===== SUMMARY ===== -->
     <div class="panel">
       <div class="panel-head">
         <span class="panel-title">Summary Statistics</span>
@@ -97,6 +120,7 @@
 
       <div class="panel-body">
         <div class="stats-grid">
+
           <div class="stat-card">
             <div class="stat-val">
               {{ patients|length if patients else 0 }}
@@ -117,16 +141,19 @@
             </div>
             <div class="stat-lbl">Low / Moderate Risk</div>
           </div>
+
         </div>
       </div>
     </div>
 
   </main>
 
+  <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
     <span>Milky Way Clinical Support System — For clinical use only.</span>
     <span>© 2026 Milky Way CDSS</span>
   </footer>
+
 </div>
 
 </body>

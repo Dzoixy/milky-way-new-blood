@@ -1,180 +1,90 @@
-.dashboard {
-    width: 100%;
-    max-width: 1100px;
+/* ===== LOGIN PAGE ===== */
+
+.login-body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
-.section-title {
-    margin-bottom: 30px;
-    letter-spacing: 2px;
+.login-wrapper {
+  width: 420px;
+  background: #ffffff;
+  border: 1px solid #ccc;
 }
 
-.card-grid {
-    display: flex;
-    gap: 30px;
+.login-header {
+  background: #000;
+  color: #fff;
+  text-align: center;
+  padding: 35px 20px;
 }
 
-.feature-card {
-    flex: 1;
-    background: #fff;
-    border: 1px solid #ccc;
-    padding: 30px;
-    transition: 0.2s ease;
+.login-title {
+  font-size: 22px;
+  letter-spacing: 4px;
+  font-weight: bold;
 }
 
-.feature-card:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+.login-sub {
+  font-size: 11px;
+  margin-top: 8px;
+  letter-spacing: 2px;
+  opacity: 0.8;
 }
 
-.feature-card h3 {
-    margin-top: 0;
+.login-content {
+  padding: 30px;
 }
 
-.feature-card p {
-    font-size: 14px;
-    color: #555;
+.login-content label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-top: 18px;
+  margin-bottom: 6px;
 }
 
-.btn-outline {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    border: 1px solid #000;
-    text-decoration: none;
-    color: #000;
-    font-weight: bold;
-    letter-spacing: 1px;
+.login-content input,
+.login-content select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #aaa;
+  font-size: 14px;
 }
 
-.btn-outline:hover {
-    background: #000;
-    color: #fff;
+.login-content input:focus,
+.login-content select:focus {
+  outline: none;
+  border-color: #000;
 }
 
-.dashboard-wrapper {
-    max-width: 1200px;
-    margin: 40px auto;
+.login-btn {
+  width: 100%;
+  margin-top: 25px;
+  padding: 12px;
+  background: #000;
+  color: #fff;
+  border: none;
+  font-size: 14px;
+  letter-spacing: 2px;
+  cursor: pointer;
 }
 
-.dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.login-btn:hover {
+  opacity: 0.85;
 }
 
-.date-text {
-    font-size: 13px;
-    color: #666;
+.demo-box {
+  margin-top: 25px;
+  font-size: 12px;
+  color: #555;
 }
 
-.divider {
-    margin: 25px 0;
-    border: none;
-    border-top: 2px solid #000;
-}
-
-.card-section {
-    border: 1px solid #000;
-    margin-bottom: 30px;
-}
-
-.section-title {
-    background: #f2f2f2;
-    padding: 10px 15px;
-    font-size: 12px;
-    letter-spacing: 2px;
-    border-bottom: 1px solid #000;
-}
-
-.flex-between {
-    display: flex;
-    justify-content: space-between;
-}
-
-.search-row {
-    display: flex;
-    gap: 10px;
-    padding: 20px;
-}
-
-.search-row input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #000;
-}
-
-.patient-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.patient-table th {
-    background: #000;
-    color: #fff;
-    text-align: left;
-    padding: 10px;
-    font-size: 12px;
-}
-
-.patient-table td {
-    padding: 10px;
-    border: 1px solid #000;
-}
-
-.badge {
-    padding: 4px 8px;
-    font-size: 11px;
-    border: 1px solid #000;
-}
-
-.badge.high {
-    background: #eee;
-}
-
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 20px;
-}
-
-.summary-card {
-    border: 1px solid #000;
-    padding: 25px;
-}
-
-.summary-card h3 {
-    margin: 0;
-    font-size: 32px;
-}
-
-.btn-primary {
-    background: #000;
-    color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
-    font-size: 12px;
-}
-
-.btn-dark {
-    background: #000;
-    color: #fff;
-    border: none;
-    padding: 8px 14px;
-}
-
-.btn-light {
-    background: #fff;
-    border: 1px solid #000;
-    padding: 8px 14px;
-}
-
-.small {
-    font-size: 11px;
-}
-
-.empty-state {
-    text-align: center;
-    padding: 30px;
-    color: #777;
-    font-style: italic;
+.demo-title {
+  font-weight: bold;
+  margin-bottom: 6px;
 }
