@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Milky Way Clinical DSS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+
+<body>
+
 <div class="page" id="page-clinician-dashboard">
   <header class="site-header">
     <div class="header-inner">
@@ -33,7 +44,6 @@
       </div>
     </div>
 
-    <!-- PATIENT LIST -->
     <div class="panel">
       <div class="panel-head">
         <span class="panel-title">Patient List</span>
@@ -54,7 +64,6 @@
                 <th>Actions</th>
               </tr>
             </thead>
-
             <tbody>
               {% if patients %}
                 {% for p in patients %}
@@ -64,7 +73,7 @@
                   <td>{{ p.last_visit }}</td>
                   <td>{{ p.risk_level }}</td>
                   <td>
-                    <a href="/patient/{{ p.id }}" class="btn btn-sm">View</a>
+                    <a href="/patient/{{ p.id }}" class="btn">View</a>
                   </td>
                 </tr>
                 {% endfor %}
@@ -76,13 +85,11 @@
                 </tr>
               {% endif %}
             </tbody>
-
           </table>
         </div>
       </div>
     </div>
 
-    <!-- SUMMARY -->
     <div class="panel">
       <div class="panel-head">
         <span class="panel-title">Summary Statistics</span>
@@ -90,7 +97,6 @@
 
       <div class="panel-body">
         <div class="stats-grid">
-
           <div class="stat-card">
             <div class="stat-val">
               {{ patients|length if patients else 0 }}
@@ -111,7 +117,6 @@
             </div>
             <div class="stat-lbl">Low / Moderate Risk</div>
           </div>
-
         </div>
       </div>
     </div>
@@ -123,3 +128,6 @@
     <span>© 2026 Milky Way CDSS</span>
   </footer>
 </div>
+
+</body>
+</html>
