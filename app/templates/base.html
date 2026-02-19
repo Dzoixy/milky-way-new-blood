@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Milky Way</title>
+    <title>Milky Way CDSS</title>
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-<header>
-    <h1>Milky Way</h1>
-    <nav>
-        <a href="/">Login</a>
-    </nav>
+
+<header class="topbar">
+    <div class="logo">
+        <strong>MILKY WAY</strong>
+        <span>CLINICAL DSS</span>
+    </div>
 </header>
 
-<main>
+<main class="container">
     {% block content %}{% endblock %}
 </main>
 
-<footer>
-    <p>Milky Way Clinical Support System</p>
+<footer class="footer">
+    Milky Way Clinical Support System – For clinical use only.
 </footer>
+
 </body>
 </html>

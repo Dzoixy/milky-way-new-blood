@@ -1,21 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-<section>
-    <h2>Login</h2>
-    <form method="POST" action="/login">
-        <label>Username</label>
-        <input type="text" name="username">
 
-        <label>Password</label>
-        <input type="password" name="password">
+<div class="auth-card">
+    <div class="auth-header">
+        <h1>MILKY WAY</h1>
+        <p>CLINICAL DECISION SUPPORT SYSTEM</p>
+    </div>
 
-        <label>Role</label>
-        <select name="role">
-            <option>Clinician</option>
-            <option>Patient</option>
+    <form method="POST" action="/login" class="auth-form">
+
+        <label>USERNAME</label>
+        <input type="text" name="username" placeholder="Enter username" required>
+
+        <label>PASSWORD</label>
+        <input type="password" name="password" placeholder="Enter password" required>
+
+        <label>ACCESS ROLE</label>
+        <select name="role" required>
+            <option value="">— Select Role —</option>
+            <option value="Clinician">Clinician</option>
+            <option value="Patient">Patient</option>
         </select>
 
-        <button type="submit">Login</button>
+        <button type="submit" class="btn-primary">LOG IN</button>
+
+        <div class="demo-info">
+            <strong>Demo credentials</strong><br>
+            Clinician — dr_smith / clinic123<br>
+            Patient — patient_001 / patient123
+        </div>
+
     </form>
-</section>
+</div>
+
 {% endblock %}
