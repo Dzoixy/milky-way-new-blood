@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+    <h2>Risk Result</h2>
+    <p>Risk: {{ risk.percentage }}%</p>
+    <p>Category: {{ risk.category }}</p>
+
+    <h3>Top Factors</h3>
+    <ul>
+        {% for factor in risk.top_factors %}
+        <li>{{ factor }}</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endblock %}

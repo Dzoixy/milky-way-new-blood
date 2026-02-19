@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<section>
+    <h2>Clinician Dashboard</h2>
+
+    <form>
+        <input type="text" placeholder="Search patient">
+        <button>Search</button>
+        <button>Add New Patient</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Last Visit</th>
+            <th>Risk</th>
+            <th>Action</th>
+        </tr>
+    </table>
+</section>
+{% endblock %}
