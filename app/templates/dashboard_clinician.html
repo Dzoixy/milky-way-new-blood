@@ -1,46 +1,125 @@
-<div class="card-section">
-    <div class="section-title flex-between">
-        <span>PATIENT LIST</span>
-        <span class="record-count">
-            {{ patients|length if patients else 0 }} RECORDS
-        </span>
+<div class="page" id="page-clinician-dashboard">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="brand-name">MILKY WAY</div>
+        <div class="brand-sub">Clinical DSS</div>
+      </div>
+
+      <nav class="header-nav">
+        <a href="/clinician/dashboard" class="nav-btn active">Dashboard</a>
+        <a href="/patient/new" class="nav-btn">New Patient</a>
+      </nav>
+
+      <div class="header-user">
+        <div>
+          <div class="user-role">Clinician</div>
+          <div class="user-name">Dr. Smith</div>
+        </div>
+        <a href="/logout" class="logout-btn">Log Out</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="site-main">
+
+    <div class="pg-header">
+      <div>
+        <div class="pg-title">Dashboard</div>
+        <div class="pg-sub">{{ current_date }}</div>
+      </div>
+      <div class="pg-actions">
+        <a href="/patient/new" class="btn">Add New Patient</a>
+      </div>
     </div>
 
-    {% if patients %}
-    <table class="patient-table">
-        <thead>
-            <tr>
+    <!-- PATIENT LIST -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Patient List</span>
+        <span class="panel-title" style="color:var(--gray-400)">
+          {{ patients|length if patients else 0 }} Records
+        </span>
+      </div>
+
+      <div class="panel-body" style="padding:0">
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr>
                 <th>Patient Name</th>
                 <th>National ID</th>
                 <th>Last Visit</th>
                 <th>Risk Level</th>
                 <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for p in patients %}
-            <tr>
-                <td>{{ p.name }}</td>
-                <td>{{ p.national_id }}</td>
-                <td>{{ p.last_visit }}</td>
-                <td>
-                    <span class="badge">{{ p.risk_level }}</span>
-                </td>
-                <td>
-                    <a href="/patient/{{ p.id }}" class="btn-dark small">VIEW</a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+              </tr>
+            </thead>
 
-    {% else %}
+            <tbody>
+              {% if patients %}
+                {% for p in patients %}
+                <tr>
+                  <td>{{ p.name }}</td>
+                  <td>{{ p.national_id }}</td>
+                  <td>{{ p.last_visit }}</td>
+                  <td>{{ p.risk_level }}</td>
+                  <td>
+                    <a href="/patient/{{ p.id }}" class="btn btn-sm">View</a>
+                  </td>
+                </tr>
+                {% endfor %}
+              {% else %}
+                <tr>
+                  <td colspan="5" style="text-align:center; padding:40px;">
+                    No patient records found.
+                  </td>
+                </tr>
+              {% endif %}
+            </tbody>
 
-    <div class="empty-state">
-        No patient records found.
-        <br><br>
-        Click "ADD NEW PATIENT" to create the first record.
+          </table>
+        </div>
+      </div>
     </div>
 
-    {% endif %}
+    <!-- SUMMARY -->
+    <div class="panel">
+      <div class="panel-head">
+        <span class="panel-title">Summary Statistics</span>
+      </div>
+
+      <div class="panel-body">
+        <div class="stats-grid">
+
+          <div class="stat-card">
+            <div class="stat-val">
+              {{ patients|length if patients else 0 }}
+            </div>
+            <div class="stat-lbl">Total Patients</div>
+          </div>
+
+          <div class="stat-card alert">
+            <div class="stat-val">
+              {{ patients | selectattr("risk_level","in",["HIGH","VERY HIGH"]) | list | length if patients else 0 }}
+            </div>
+            <div class="stat-lbl">High / Very High Risk</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-val">
+              {{ patients | selectattr("risk_level","in",["LOW","MODERATE"]) | list | length if patients else 0 }}
+            </div>
+            <div class="stat-lbl">Low / Moderate Risk</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>Milky Way Clinical Support System — For clinical use only.</span>
+    <span>© 2026 Milky Way CDSS</span>
+  </footer>
 </div>
