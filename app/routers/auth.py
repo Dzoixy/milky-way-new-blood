@@ -16,9 +16,11 @@ async def login(
     role: str = Form(...)
 ):
 
+    role = role.strip().lower()
+
     request.session["role"] = role
 
-    if role == "cnician":
+    if role == "clinician":
         return RedirectResponse("/clinician/dashboard", status_code=303)
 
     if role == "patient":
