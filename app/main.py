@@ -41,3 +41,7 @@ app.include_router(risk.router)
 async def startup():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        
+@app.get("/")
+def root():
+    return RedirectResponse("/login")
