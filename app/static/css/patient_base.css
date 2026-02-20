@@ -35,3 +35,11 @@ nav a {
     padding: 5px 10px;
     text-decoration: none;
 }
+
+.empty-box {
+    border: 1px solid #000;
+    padding: 30px;
+    background: #fff;
+    margin-top: 30px;
+    font-size: 14px;
+}

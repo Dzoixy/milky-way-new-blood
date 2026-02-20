@@ -1,17 +1,12 @@
 {% extends "base_patient.html" %}
-{% block extra_css %}
-<link rel="stylesheet" href="/static/css/dashboard_patient.css">
-{% endblock %}
 
 {% block content %}
 
 <h1>My Health Summary</h1>
-<p class="subtitle">
-Hello, {{ patient_name }}. Below is your latest cardiovascular risk assessment.
-</p>
+
+{% if risk_percent %}
 
 <div class="risk-card">
-
     <div class="risk-bar">
         <div class="risk-fill" style="width: {{ risk_percent }}%"></div>
     </div>
@@ -20,12 +15,13 @@ Hello, {{ patient_name }}. Below is your latest cardiovascular risk assessment.
         <div class="risk-number">{{ risk_percent }}%</div>
         <div class="risk-level">{{ risk_category }}</div>
     </div>
-
-    <div class="risk-warning">
-        Your cardiovascular risk is <b>{{ risk_category|lower }}</b>.
-        Please contact your healthcare provider.
-    </div>
-
 </div>
+
+{% else %}
+
+<div class="empty-box">
+</div>
+
+{% endif %}
 
 {% endblock %}
