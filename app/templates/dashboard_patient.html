@@ -1,25 +1,31 @@
-{% extends "base_patient.html" %}
-
+{% extends "base.html" %}
 {% block content %}
 
-<h1>My Health Summary</h1>
+<h1>Dashboard</h1>
 
-{% if risk_percent %}
+{% if patients and patients|length > 0 %}
 
-<div class="risk-card">
-    <div class="risk-bar">
-        <div class="risk-fill" style="width: {{ risk_percent }}%"></div>
-    </div>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Risk</th>
+        <th>Actions</th>
+    </tr>
 
-    <div class="risk-values">
-        <div class="risk-number">{{ risk_percent }}%</div>
-        <div class="risk-level">{{ risk_category }}</div>
-    </div>
-</div>
+    {% for p in patients %}
+    <tr>
+        <td>{{ p.name }}</td>
+        <td>{{ p.risk_level }}</td>
+        <td><a href="#">View</a></td>
+    </tr>
+    {% endfor %}
+</table>
 
 {% else %}
 
 <div class="empty-box">
+    No patients registered yet.
+    Please add your first patient.
 </div>
 
 {% endif %}
