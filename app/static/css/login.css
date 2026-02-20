@@ -1,0 +1,94 @@
+/* ================= RESET ================= */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", Arial, sans-serif;
+}
+
+body{
+  background:#ececec;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ================= CARD ================= */
+.login-card{
+  width:420px;
+  border:1px solid #222;
+  background:#f7f7f7;
+}
+
+/* ================= HEADER ================= */
+.login-header{
+  background:#000;
+  color:#fff;
+  text-align:center;
+  padding:28px 20px 24px 20px;
+}
+
+.login-header h1{
+  letter-spacing:5px;
+  font-weight:600;
+  font-size:20px;
+}
+
+.login-header p{
+  font-size:10px;
+  letter-spacing:2px;
+  opacity:.6;
+  margin-top:6px;
+}
+
+/* ================= BODY ================= */
+.login-body{
+  padding:28px;
+}
+
+label{
+  font-size:11px;
+  letter-spacing:1px;
+  display:block;
+  margin-bottom:6px;
+  text-transform:uppercase;
+}
+
+input, select{
+  width:100%;
+  padding:10px;
+  border:1px solid #222;
+  background:#fff;
+  margin-bottom:18px;
+  font-size:13px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  background:#000;
+  color:#fff;
+  border:1px solid #000;
+  font-size:12px;
+  letter-spacing:1px;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+/* ================= DEMO ================= */
+.demo{
+  font-size:11px;
+  margin-top:25px;
+  color:#555;
+  line-height:1.6;
+}
+
+.demo strong{
+  display:block;
+  margin-bottom:6px;
+  color:#111;
+}

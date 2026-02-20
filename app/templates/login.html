@@ -3,18 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <title>Login - Milky Way</title>
-<link rel="stylesheet" href="/static/css/dashboard.css">
+<link rel="stylesheet" href="/static/css/login.css">
 </head>
-<body style="display:flex; align-items:center; justify-content:center; height:100vh;">
+<body>
 
-<div style="width:400px; border:1px solid #000; padding:40px; background:#fff;">
-    <h2 style="margin-bottom:30px;">Clinician Login</h2>
+<div class="login-card">
+
+  <div class="login-header">
+    <h1>MILKY WAY</h1>
+    <p>CLINICAL DECISION SUPPORT SYSTEM</p>
+  </div>
+
+  <div class="login-body">
 
     <form method="POST" action="/login">
-        <input type="text" name="username" placeholder="Username" required style="margin-bottom:15px;">
-        <input type="password" name="password" placeholder="Password" required style="margin-bottom:20px;">
-        <button class="btn btn-black" style="width:100%;">LOG IN</button>
+
+      <label>Username</label>
+      <input type="text" name="username" placeholder="Enter username" required>
+
+      <label>Password</label>
+      <input type="password" name="password" placeholder="Enter password" required>
+
+      <label>Access Role</label>
+      <select name="role" required>
+        <option value="">– Select Role –</option>
+        <option value="clinician">Clinician</option>
+        <option value="patient">Patient</option>
+      </select>
+
+      <button type="submit">LOG IN</button>
+
     </form>
+
+    <div class="demo">
+      <strong>Demo credentials</strong>
+      Clinician — dr_smith / clinic123<br>
+      Patient — patient_001 / patient123
+    </div>
+
+  </div>
+
 </div>
 
 </body>
