@@ -18,10 +18,10 @@ async def login(
 
     request.session["role"] = role
 
-    if role == "Clinician":
+    if role == "cnician":
         return RedirectResponse("/clinician/dashboard", status_code=303)
 
-    if role == "Patient":
+    if role == "patient":
         return RedirectResponse("/patient/dashboard", status_code=303)
 
     return RedirectResponse("/login", status_code=303)
