@@ -1,4 +1,4 @@
-rom fastapi import APIRouter, Request
+from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
