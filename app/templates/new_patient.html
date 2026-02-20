@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-title">Add New Patient</div>
+<div class="hr"></div>
+
+<div class="tabs">
+  <span>A. BASIC INFO</span>
+  <span class="active">B. VITAL SIGNS</span>
+  <span>C. LIFESTYLE</span>
+  <span>D. MEDICAL HISTORY</span>
+</div>
+
+<div class="panel">
+  <div class="panel-head">B. VITAL SIGNS & LABORATORY VALUES</div>
+  <div class="panel-body">
+
+    <div class="form-grid-3">
+      <div>
+        <label>Systolic BP (mmHg)</label>
+        <input type="number">
+      </div>
+      <div>
+        <label>Diastolic BP (mmHg)</label>
+        <input type="number">
+      </div>
+      <div>
+        <label>Fasting Glucose (mg/dL)</label>
+        <input type="number">
+      </div>
+    </div>
+
+    <div class="form-grid-3">
+      <div>
+        <label>HbA1c (%)</label>
+        <input type="number">
+      </div>
+      <div>
+        <label>Total Cholesterol (mg/dL)</label>
+        <input type="number">
+      </div>
+      <div>
+        <label>LDL (mg/dL)</label>
+        <input type="number">
+      </div>
+    </div>
+
+    <div class="form-grid-2">
+      <div>
+        <label>HDL (mg/dL)</label>
+        <input type="number">
+      </div>
+      <div>
+        <label>Triglycerides (mg/dL)</label>
+        <input type="number">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn">← BACK</button>
+      <button class="btn btn-black">NEXT: LIFESTYLE →</button>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

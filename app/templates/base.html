@@ -1,24 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Milky Way CDSS</title>
-    <link rel="stylesheet" href="/static/css/style.css">
+<meta charset="UTF-8">
+<title>Milky Way Clinical DSS</title>
+<link rel="stylesheet" href="/static/css/clinician.css">
 </head>
 <body>
 
 <header class="topbar">
-    <div class="logo">
-        <strong>MILKY WAY</strong>
-        <span>CLINICAL DSS</span>
-    </div>
+  <div>
+    <div class="brand-name">MILKY WAY</div>
+    <div class="brand-sub">CLINICAL DSS</div>
+  </div>
+
+  <nav class="nav">
+    <a href="/clinician/dashboard" class="{% if active=='dashboard' %}active{% endif %}">DASHBOARD</a>
+    <a href="/patient/new" class="{% if active=='new' %}active{% endif %}">NEW PATIENT</a>
+  </nav>
+
+  <div class="user">
+    CLINICIAN<br>
+    {{ user_name }}
+    <a href="/logout" class="logout">LOG OUT</a>
+  </div>
 </header>
 
-<main class="container">
-    {% block content %}{% endblock %}
-</main>
+<div class="container">
+{% block content %}{% endblock %}
+</div>
 
 <footer class="footer">
-    Milky Way Clinical Support System – For clinical use only.
+  <div>Milky Way Clinical Support System — For clinical use only.</div>
+  <div>© 2026 Milky Way CDSS</div>
 </footer>
 
 </body>
