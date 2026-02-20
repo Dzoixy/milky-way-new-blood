@@ -1,0 +1,54 @@
+{% extends "base_patient.html" %}
+{% block extra_css %}
+<link rel="stylesheet" href="/static/css/result_patient.css">
+{% endblock %}
+
+{% block content %}
+
+<h2>S3 – Clinical Recommendations</h2>
+
+<div class="two-column">
+
+    <div class="card">
+        <h3>Recommended Medications</h3>
+        <table>
+            <tr>
+                <th>Medication</th>
+                <th>Rationale</th>
+            </tr>
+            {% for med in medications %}
+            <tr>
+                <td>{{ med.name }}</td>
+                <td>{{ med.reason }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="card">
+        <h3>Contraindications</h3>
+        <p>No contraindications identified.</p>
+    </div>
+
+</div>
+
+<h2>S4 – Visit History</h2>
+
+<table class="visit-table">
+    <tr>
+        <th>Visit Date</th>
+        <th>Risk Score (%)</th>
+        <th>Risk Category</th>
+        <th>Notes</th>
+    </tr>
+    {% for visit in visits %}
+    <tr>
+        <td>{{ visit.date }}</td>
+        <td>{{ visit.score }}%</td>
+        <td><span class="badge">{{ visit.category }}</span></td>
+        <td>{{ visit.notes }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

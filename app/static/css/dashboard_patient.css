@@ -1,0 +1,31 @@
+.risk-card {
+    border: 1px solid #000;
+    padding: 30px;
+    background: white;
+}
+
+.risk-bar {
+    background: #ddd;
+    height: 20px;
+    margin-bottom: 20px;
+}
+
+.risk-fill {
+    background: black;
+    height: 20px;
+}
+
+.risk-number {
+    font-size: 48px;
+}
+
+.risk-level {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.risk-warning {
+    margin-top: 20px;
+    border-left: 4px solid black;
+    padding-left: 15px;
+}

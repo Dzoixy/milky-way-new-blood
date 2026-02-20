@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Milky Way CDSS</title>
+    <link rel="stylesheet" href="/static/css/patient_base.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<header class="topbar">
+    <div class="logo">
+        MILKY WAY
+        <span>CLINICAL DSS</span>
+    </div>
+
+    <nav>
+        <a href="/patient/dashboard">MY HEALTH</a>
+        <a href="/patient/results">MY RESULTS</a>
+    </nav>
+
+    <div class="user">
+        PATIENT<br>
+        {{ patient_name }}
+        <a href="/logout" class="logout">LOG OUT</a>
+    </div>
+</header>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+</body>
+</html>
