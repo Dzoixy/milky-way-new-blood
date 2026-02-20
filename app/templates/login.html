@@ -1,48 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Milky Way | Login</title>
-  <link rel="stylesheet" href="/static/style.css">
-</head>
-<body class="login-body">
+<meta charset="UTF-8">
+<title>Milky Way Login</title>
+<style>
+/* ===== Page Background ===== */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #e9e9e9;
+    font-family: 'Courier New', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
 
-  <div class="login-wrapper">
+/* ===== Main Card ===== */
+.login-container {
+    width: 420px;
+    background: #f4f4f4;
+    border: 1px solid #000;
+}
+
+/* ===== Header ===== */
+.login-header {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+.login-header h1 {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: 6px;
+    font-weight: normal;
+}
+
+.login-header p {
+    margin-top: 8px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #bdbdbd;
+}
+
+/* ===== Form Section ===== */
+.login-body {
+    padding: 30px 25px;
+}
+
+label {
+    font-size: 12px;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #000;
+    background: #fff;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    letter-spacing: 2px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* ===== Footer Demo ===== */
+.login-footer {
+    padding: 15px 25px 25px 25px;
+    font-size: 11px;
+    border-top: 1px solid #ccc;
+    color: #444;
+}
+
+.login-footer b {
+    display: block;
+    margin-bottom: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="login-container">
 
     <div class="login-header">
-      <div class="login-title">MILKY WAY</div>
-      <div class="login-sub">CLINICAL DECISION SUPPORT SYSTEM</div>
+        <h1>MILKY WAY</h1>
+        <p>CLINICAL DECISION SUPPORT SYSTEM</p>
     </div>
 
-    <div class="login-content">
-      <form method="post" action="/login">
+    <div class="login-body">
+        <form method="POST">
 
-        <label>USERNAME</label>
-        <input type="text" name="username" placeholder="Enter username" required>
+            <label>USERNAME</label>
+            <input type="text" name="username" placeholder="Enter username">
 
-        <label>PASSWORD</label>
-        <input type="password" name="password" placeholder="Enter password" required>
+            <label>PASSWORD</label>
+            <input type="password" name="password" placeholder="Enter password">
 
-        <label>ACCESS ROLE</label>
-        <select name="role" required>
-          <option value="">– Select Role –</option>
-          <option value="clinician">Clinician</option>
-          <option value="patient">Patient</option>
-        </select>
+            <label>ACCESS ROLE</label>
+            <select name="role">
+                <option value="">– Select Role –</option>
+                <option value="clinician">Clinician</option>
+                <option value="patient">Patient</option>
+            </select>
 
-        <button type="submit" class="login-btn">LOG IN</button>
+            <button type="submit">LOG IN</button>
 
-      </form>
-
-      <div class="demo-box">
-        <div class="demo-title">Demo credentials</div>
-        <div>Clinician — dr_smith / clinic123</div>
-        <div>Patient — patient_001 / patient123</div>
-      </div>
-
+        </form>
     </div>
 
-  </div>
+    <div class="login-footer">
+        <b>Demo credentials</b>
+        Clinician — dr_smith / clinic123<br>
+        Patient — patient_001 / patient123
+    </div>
+
+</div>
 
 </body>
 </html>
