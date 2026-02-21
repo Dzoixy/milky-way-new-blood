@@ -7,17 +7,37 @@ from app.database.connection import Base
 class Visit(Base):
     __tablename__ = "visits"
 
-    id: Mapped[int] = mapped_column(Integer, primary_key=True)
-    patient_id: Mapped[int] = mapped_column(ForeignKey("patients.id"), nullable=False)
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        index=True
+    )
 
+    patient_id: Mapped[int] = mapped_column(
+        ForeignKey("patients.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True
+    )
+
+    # Clinical measurements
     sbp: Mapped[float] = mapped_column(Float, nullable=False)
     dbp: Mapped[float] = mapped_column(Float, nullable=False)
-    risk_score: Mapped[float] = mapped_column(Float, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(
-        DateTime,
+        DateTime(timezone=True),
         default=datetime.utcnow,
         nullable=False
     )
 
-    patient = relationship("Patient", back_populates="visits")
+    # Relationships
+    patient = relationship(
+        "Patient",
+        back_populates="visits"
+    )
+
+    risk_result = relationship(
+        "RiskResult",
+        back_populates="visit",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
