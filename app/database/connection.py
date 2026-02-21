@@ -6,14 +6,17 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.orm import declarative_base
 
-# อ่านจาก environment ก่อน
+# ======================================================
+# DATABASE URL
+# ======================================================
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# ถ้าไม่มี (เช่น local dev) ให้ fallback เป็น SQLite
+# Fallback สำหรับ local dev เท่านั้น
 if not DATABASE_URL:
     DATABASE_URL = "sqlite+aiosqlite:///./milkyway.db"
 
-# ถ้าเป็น postgres แบบ sync ให้แปลงเป็น async
+# Render / Heroku postgres URL fix (sync → async)
 if DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace(
         "postgresql://",
@@ -21,11 +24,21 @@ if DATABASE_URL.startswith("postgresql://"):
         1
     )
 
+# ======================================================
+# ENGINE (Production-ready pooling)
+# ======================================================
+
 engine = create_async_engine(
     DATABASE_URL,
-    echo=False,  # production ไม่ควร echo=True
-    pool_pre_ping=True,
+    echo=False,                 # ห้ามเปิดใน production
+    pool_pre_ping=True,         # เช็ค connection ก่อนใช้งาน
+    pool_size=5,                # worker connection pool
+    max_overflow=10,            # burst traffic
 )
+
+# ======================================================
+# SESSION FACTORY
+# ======================================================
 
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
@@ -35,6 +48,9 @@ AsyncSessionLocal = async_sessionmaker(
 
 Base = declarative_base()
 
+# ======================================================
+# Dependency
+# ======================================================
 
 async def get_db() -> AsyncSession:
     async with AsyncSessionLocal() as session:
