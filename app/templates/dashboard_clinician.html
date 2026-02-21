@@ -1,10 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="page-title">Dashboard</div>
-<div class="page-sub">{{ current_date }}</div>
+<div style="display:flex; justify-content:space-between; align-items:center;">
+    <div>
+        <div class="page-title">Dashboard</div>
+        <div class="page-sub">{{ current_date }}</div>
+    </div>
+
+    <a href="/clinician/new-patient" class="btn btn-black">
+        NEW PATIENT
+    </a>
+</div>
+
 <div class="hr"></div>
 
+<!-- ===================== -->
+<!-- PATIENT SEARCH -->
+<!-- ===================== -->
 <div class="panel">
   <div class="panel-head">PATIENT SEARCH</div>
   <div class="panel-body">
@@ -16,10 +28,11 @@
   </div>
 </div>
 
+<!-- ===================== -->
+<!-- PATIENT LIST -->
+<!-- ===================== -->
 <div class="panel">
-  <div class="panel-head">
-    PATIENT LIST
-  </div>
+  <div class="panel-head">PATIENT LIST</div>
   <div class="panel-body">
     <table>
       <thead>
@@ -37,10 +50,21 @@
           <td>{{ p.name }}</td>
           <td>{{ p.national_id }}</td>
           <td>{{ p.last_visit }}</td>
-          <td><span class="badge">{{ p.risk_level }}</span></td>
           <td>
+            <span class="badge">{{ p.risk_level }}</span>
+          </td>
+          <td>
+            <!-- ✅ path ถูกต้อง -->
             <a href="/clinician/patient/{{ p.id }}" class="btn">VIEW</a>
-            <a href="/clinician/patient/{{ p.id }}/new-visit" class="btn">NEW VISIT</a> 
+            <a href="/clinician/patient/{{ p.id }}/new-visit" class="btn">
+              NEW VISIT
+            </a>
+          </td>
+        </tr>
+      {% else %}
+        <tr>
+          <td colspan="5" style="text-align:center; padding:20px;">
+            No patients yet.
           </td>
         </tr>
       {% endfor %}
@@ -49,26 +73,33 @@
   </div>
 </div>
 
+<!-- ===================== -->
+<!-- SUMMARY -->
+<!-- ===================== -->
 <div class="panel">
   <div class="panel-head">SUMMARY STATISTICS</div>
   <div class="panel-body">
     <div class="summary-grid">
+
       <div class="summary-box">
         <div class="summary-num">{{ patients|length }}</div>
         <div class="summary-label">TOTAL PATIENTS</div>
       </div>
+
       <div class="summary-box">
         <div class="summary-num">
           {{ patients | selectattr("risk_level","in",["HIGH","VERY HIGH"]) | list | length }}
         </div>
         <div class="summary-label">HIGH / VERY HIGH RISK</div>
       </div>
+
       <div class="summary-box">
         <div class="summary-num">
           {{ patients | selectattr("risk_level","in",["LOW","MODERATE"]) | list | length }}
         </div>
         <div class="summary-label">LOW / MODERATE RISK</div>
       </div>
+
     </div>
   </div>
 </div>
