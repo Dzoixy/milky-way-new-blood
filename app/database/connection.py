@@ -1,22 +1,12 @@
-import os
-from sqlalchemy.ext.asyncio import (
-    create_async_engine,
-    async_sessionmaker,
-    AsyncSession,
-)
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import declarative_base
-
-# ======================================================
-# DATABASE URL
-# ======================================================
+import os
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-# Fallback สำหรับ local dev เท่านั้น
 if not DATABASE_URL:
     DATABASE_URL = "sqlite+aiosqlite:///./milkyway.db"
 
-# Render / Heroku postgres URL fix (sync → async)
 if DATABASE_URL.startswith("postgresql://"):
     DATABASE_URL = DATABASE_URL.replace(
         "postgresql://",
@@ -24,21 +14,23 @@ if DATABASE_URL.startswith("postgresql://"):
         1
     )
 
-# ======================================================
-# ENGINE (Production-ready pooling)
-# ======================================================
+# -------------------------
+# Engine Configuration
+# -------------------------
 
-engine = create_async_engine(
-    DATABASE_URL,
-    echo=False,                 # ห้ามเปิดใน production
-    pool_pre_ping=True,         # เช็ค connection ก่อนใช้งาน
-    pool_size=5,                # worker connection pool
-    max_overflow=10,            # burst traffic
-)
-
-# ======================================================
-# SESSION FACTORY
-# ======================================================
+if DATABASE_URL.startswith("sqlite"):
+    engine = create_async_engine(
+        DATABASE_URL,
+        echo=False
+    )
+else:
+    engine = create_async_engine(
+        DATABASE_URL,
+        echo=False,
+        pool_size=5,
+        max_overflow=10,
+        pool_pre_ping=True,
+    )
 
 AsyncSessionLocal = async_sessionmaker(
     bind=engine,
@@ -48,10 +40,7 @@ AsyncSessionLocal = async_sessionmaker(
 
 Base = declarative_base()
 
-# ======================================================
-# Dependency
-# ======================================================
 
-async def get_db() -> AsyncSession:
+async def get_db():
     async with AsyncSessionLocal() as session:
         yield session
