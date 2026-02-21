@@ -1,32 +1,71 @@
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import select
+
+from app.database.connection import AsyncSessionLocal
+from app.models.user_model import User
+from app.utils.security import verify_password
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
+
+
+# =========================================
+# Login Page
+# =========================================
+
 @router.get("/login")
-async def login(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+async def login_page(request: Request):
+    return templates.TemplateResponse(
+        "login.html",
+        {"request": request}
+    )
+
+
+# =========================================
+# Login Process
+# =========================================
 
 @router.post("/login")
 async def login(
     request: Request,
     username: str = Form(...),
-    password: str = Form(...),
-    role: str = Form(...)
+    password: str = Form(...)
 ):
 
-    role = role.strip().lower()
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(
+            select(User).where(User.username == username)
+        )
+        user = result.scalar_one_or_none()
 
-    request.session["role"] = role
+    # ❌ ถ้าไม่มี user
+    if not user:
+        return RedirectResponse("/login", status_code=303)
 
-    if role == "clinician":
+    # ❌ ถ้า password ไม่ถูก
+    if not verify_password(password, user.password_hash):
+        return RedirectResponse("/login", status_code=303)
+
+    # ✅ เก็บ session
+    request.session["user_id"] = user.id
+    request.session["role"] = user.role
+    request.session["user_name"] = user.username
+
+    # ✅ redirect ตาม role จาก DB เท่านั้น
+    if user.role == "clinician":
         return RedirectResponse("/clinician/dashboard", status_code=303)
 
-    if role == "patient":
+    if user.role == "patient":
         return RedirectResponse("/patient/dashboard", status_code=303)
 
     return RedirectResponse("/login", status_code=303)
+
+
+# =========================================
+# Logout
+# =========================================
 
 @router.get("/logout")
 async def logout(request: Request):
