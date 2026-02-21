@@ -47,3 +47,19 @@ async def patient_results(request: Request):
         "patient_results.html",
         context
     )
+    
+@router.get("/dashboard")
+async def patient_dashboard(request: Request):
+
+    if request.session.get("role") != "patient":
+        return RedirectResponse("/login", status_code=303)
+
+    return templates.TemplateResponse(
+        "dashboard_patient.html",
+        {
+            "request": request,
+            "role": "patient",
+            "user_name": request.session.get("user_name"),
+            "active": "health"
+        }
+    )

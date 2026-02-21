@@ -27,3 +27,8 @@ async def login(
         return RedirectResponse("/patient/dashboard", status_code=303)
 
     return RedirectResponse("/login", status_code=303)
+
+@router.get("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    return RedirectResponse("/login", status_code=303)
