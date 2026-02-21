@@ -4,8 +4,8 @@ from sqlalchemy import select
 from app.database.connection import AsyncSessionLocal, engine, Base
 from app.models.user_model import User
 from app.utils.security import get_password_hash
-
-
+from app.database.connection import DATABASE_URL
+print("Using DB:", DATABASE_URL)
 async def create_user():
 
     # 🔹 สร้าง table ก่อน (สำคัญ)

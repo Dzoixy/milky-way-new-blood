@@ -1,43 +1,152 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Add New Patient</h1>
+{% set step = request.query_params.get("step", "a") %}
 
-<form method="POST" action="/clinician/new-patient">
+<div class="np-container">
 
-<div class="step" id="step1">
-    <h3>A. Basic Info</h3>
-    <input name="full_name" placeholder="Full Name" required>
-    <input name="national_id" placeholder="National ID" required>
-    <input name="age" type="number" placeholder="Age" required>
-    <button type="button" onclick="nextStep(2)">Next</button>
+  <div class="breadcrumb">Dashboard / New Patient</div>
+
+  <h1 class="np-title">Add New Patient</h1>
+  <div class="np-divider"></div>
+
+  <!-- Tabs -->
+  <div class="np-tabs">
+    <a href="?step=a" class="tab {{ 'active' if step=='a' }}">A. BASIC INFO</a>
+    <a href="?step=b" class="tab {{ 'active' if step=='b' }}">B. VITAL SIGNS</a>
+    <a href="?step=c" class="tab {{ 'active' if step=='c' }}">C. LIFESTYLE</a>
+    <a href="?step=d" class="tab {{ 'active' if step=='d' }}">D. MEDICAL HISTORY</a>
+  </div>
+
+  <div class="np-panel">
+    <div class="np-panel-head">
+      {% if step=='a' %}A. BASIC INFORMATION{% endif %}
+      {% if step=='b' %}B. VITAL SIGNS & LABORATORY VALUES{% endif %}
+      {% if step=='c' %}C. LIFESTYLE FACTORS{% endif %}
+      {% if step=='d' %}D. MEDICAL HISTORY{% endif %}
+    </div>
+
+    <form method="post" class="np-form">
+
+      {% if step=='a' %}
+      <div class="np-grid-2">
+        <div class="field">
+          <label>FULL NAME *</label>
+          <input type="text" name="full_name" required>
+        </div>
+        <div class="field">
+          <label>NATIONAL ID *</label>
+          <input type="text" name="national_id" required>
+        </div>
+        <div class="field">
+          <label>DATE OF BIRTH *</label>
+          <input type="date" name="date_of_birth" required>
+        </div>
+        <div class="field">
+          <label>GENDER *</label>
+          <select name="gender" required>
+            <option value="">– Select –</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+      </div>
+      <button formaction="?step=b" class="np-btn">NEXT: VITAL SIGNS →</button>
+      {% endif %}
+
+      {% if step=='b' %}
+      <div class="np-grid-3">
+        <div class="field">
+          <label>SYSTOLIC BP (MMHG) *</label>
+          <input type="number" name="sbp" placeholder="e.g. 130" required>
+        </div>
+        <div class="field">
+          <label>DIASTOLIC BP (MMHG) *</label>
+          <input type="number" name="dbp" placeholder="e.g. 85" required>
+        </div>
+        <div class="field">
+          <label>FASTING GLUCOSE (MG/DL) *</label>
+          <input type="number" name="glucose" placeholder="e.g. 95" required>
+        </div>
+        <div class="field">
+          <label>HBA1C (%)</label>
+          <input type="number" step="0.1" name="hba1c">
+        </div>
+        <div class="field">
+          <label>TOTAL CHOLESTEROL (MG/DL)</label>
+          <input type="number" name="total_chol">
+        </div>
+        <div class="field">
+          <label>LDL (MG/DL)</label>
+          <input type="number" name="ldl">
+        </div>
+        <div class="field">
+          <label>HDL (MG/DL)</label>
+          <input type="number" name="hdl">
+        </div>
+        <div class="field">
+          <label>TRIGLYCERIDES (MG/DL)</label>
+          <input type="number" name="tg">
+        </div>
+      </div>
+      <div class="btn-row">
+        <a href="?step=a" class="np-btn-light">← BACK</a>
+        <button formaction="?step=c" class="np-btn">NEXT: LIFESTYLE →</button>
+      </div>
+      {% endif %}
+
+      {% if step=='c' %}
+      <div class="np-grid-2">
+        <div class="field">
+          <label>SMOKING STATUS</label>
+          <div class="checkbox">
+            <input type="checkbox" name="smoker">
+            <span>Current Smoker</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>EXERCISE FREQUENCY</label>
+          <select name="exercise">
+            <option>None / Sedentary</option>
+            <option>1–2 days/week</option>
+            <option>3–4 days/week</option>
+            <option>5+ days/week</option>
+          </select>
+        </div>
+      </div>
+      <div class="btn-row">
+        <a href="?step=b" class="np-btn-light">← BACK</a>
+        <button formaction="?step=d" class="np-btn">NEXT: MEDICAL HISTORY →</button>
+      </div>
+      {% endif %}
+
+      {% if step=='d' %}
+      <div class="np-grid-1">
+        <div class="field">
+          <label>CHRONIC DISEASES</label>
+          <textarea name="chronic" rows="3"></textarea>
+        </div>
+        <div class="field">
+          <label>FAMILY HISTORY</label>
+          <textarea name="family" rows="3"></textarea>
+        </div>
+        <div class="field">
+          <label>DRUG ALLERGIES / INTOLERANCES</label>
+          <textarea name="allergies" rows="3"></textarea>
+        </div>
+        <div class="field">
+          <label>CLINICIAN NOTES</label>
+          <textarea name="notes" rows="3"></textarea>
+        </div>
+      </div>
+      <div class="btn-row">
+        <a href="?step=c" class="np-btn-light">← BACK</a>
+        <button class="np-btn">CALCULATE RISK & SAVE VISIT</button>
+      </div>
+      {% endif %}
+
+    </form>
+  </div>
 </div>
-
-<div class="step" id="step2" style="display:none;">
-    <h3>B. Vital Signs</h3>
-    <input name="systolic" placeholder="Systolic BP" required>
-    <input name="diastolic" placeholder="Diastolic BP" required>
-    <input name="glucose" placeholder="Fasting Glucose" required>
-    <input name="cholesterol" placeholder="Total Cholesterol" required>
-    <button type="button" onclick="nextStep(3)">Next</button>
-</div>
-
-<div class="step" id="step3" style="display:none;">
-    <h3>D. Medical History</h3>
-    <textarea name="chronic" placeholder="Chronic diseases"></textarea>
-
-    <button type="submit">
-        CALCULATE RISK & SAVE VISIT
-    </button>
-</div>
-
-</form>
-
-<script>
-function nextStep(step) {
-    document.querySelectorAll(".step").forEach(s => s.style.display="none");
-    document.getElementById("step"+step).style.display="block";
-}
-</script>
 
 {% endblock %}
