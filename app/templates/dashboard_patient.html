@@ -1,33 +1,49 @@
 {% extends "base.html" %}
+
 {% block content %}
 
-<h1>Dashboard</h1>
+<h1 class="page-title">My Health Summary</h1>
 
-{% if patients and patients|length > 0 %}
+<div class="card">
+    <div class="section-title">YOUR RISK ASSESSMENT</div>
 
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Risk</th>
-        <th>Actions</th>
-    </tr>
+    <div class="risk-bar">
+        <div class="risk-fill" style="width: {{ risk_percent or 0 }}%"></div>
+    </div>
 
-    {% for p in patients %}
-    <tr>
-        <td>{{ p.name }}</td>
-        <td>{{ p.risk_level }}</td>
-        <td><a href="#">View</a></td>
-    </tr>
-    {% endfor %}
-</table>
-
-{% else %}
-
-<div class="empty-box">
-    No patients registered yet.
-    Please add your first patient.
+    <div class="risk-data">
+        <div class="risk-number">{{ risk_percent or 0 }}%</div>
+        <div class="risk-category">{{ risk_category or "NO DATA" }}</div>
+    </div>
 </div>
 
-{% endif %}
+<div class="card">
+    <div class="section-title">VISIT HISTORY</div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Visit Date</th>
+                <th>Risk Score (%)</th>
+                <th>Risk Category</th>
+                <th>Notes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>2025-11-20</td>
+                <td>62%</td>
+                <td>HIGH</td>
+                <td>Initial assessment</td>
+            </tr>
+            <tr>
+                <td>2025-08-10</td>
+                <td>58.5%</td>
+                <td>HIGH</td>
+                <td>Follow-up review</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

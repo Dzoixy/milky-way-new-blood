@@ -1,31 +1,78 @@
-.risk-card {
-    border: 1px solid #000;
-    padding: 30px;
+body {
+    font-family: Arial, sans-serif;
+    background: #f2f2f2;
+    margin: 0;
+}
+
+.topbar {
+    background: black;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    padding: 40px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.page-title {
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+.card {
     background: white;
+    border: 1px solid #ddd;
+    padding: 25px;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 .risk-bar {
-    background: #ddd;
     height: 20px;
+    background: #ddd;
     margin-bottom: 20px;
 }
 
 .risk-fill {
+    height: 100%;
     background: black;
-    height: 20px;
+}
+
+.risk-data {
+    display: flex;
+    gap: 40px;
+    align-items: center;
 }
 
 .risk-number {
     font-size: 48px;
 }
 
-.risk-level {
-    font-size: 20px;
+.risk-category {
+    font-size: 22px;
     font-weight: bold;
 }
 
-.risk-warning {
-    margin-top: 20px;
-    border-left: 4px solid black;
-    padding-left: 15px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th {
+    background: black;
+    color: white;
+    padding: 10px;
+}
+
+table td {
+    padding: 10px;
+    border: 1px solid #ddd;
 }
