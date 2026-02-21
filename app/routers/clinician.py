@@ -127,22 +127,44 @@ async def view_visit_result(
 # ==========================
 # New Patient (GET)
 # ==========================
-@router.get("/new-patient")
-async def new_patient_form(
+@router.post("/new-patient")
+async def create_patient(
     request: Request,
-    step: str = "a"   # 👈 รับ step จาก ?step=b
+    full_name: str = Form(...),
+    national_id: str = Form(...),
+    date_of_birth: date = Form(...),
+    gender: str = Form(...),
+    db: AsyncSession = Depends(get_db)
 ):
 
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
-    context = clinician_context(request, "new")
-    context["step"] = step   # 👈 ส่งเข้า template
+    user_id = request.session.get("user_id")   # 👈 ดึงจาก session
 
-    return templates.TemplateResponse(
-        "new_patient.html",
-        context
+    if not user_id:
+        return RedirectResponse("/login", status_code=303)
+
+    result = await db.execute(
+        select(Patient).where(Patient.national_id == national_id)
     )
+    existing = result.scalar_one_or_none()
+
+    if existing:
+        return RedirectResponse("/clinician/new-patient", status_code=303)
+
+    new_patient = Patient(
+        full_name=full_name,
+        national_id=national_id,
+        date_of_birth=date_of_birth,
+        gender=gender,
+        user_id=user_id   # 👈 ใส่ตรงนี้
+    )
+
+    db.add(new_patient)
+    await db.commit()
+
+    return RedirectResponse("/clinician/dashboard", status_code=303)
 
 # ==========================
 # New Patient (POST)
