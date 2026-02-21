@@ -6,6 +6,15 @@ router = APIRouter(prefix="/clinician")
 templates = Jinja2Templates(directory="app/templates")
 
 
+def clinician_context(request: Request, active: str):
+    return {
+        "request": request,
+        "role": request.session.get("role"),
+        "user_name": request.session.get("user_name", "Unknown User"),
+        "active": active
+    }
+
+
 # -------------------------
 # Dashboard
 # -------------------------
@@ -15,15 +24,12 @@ async def clinician_dashboard(request: Request):
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
+    context = clinician_context(request, "dashboard")
+    context["patients"] = []
+
     return templates.TemplateResponse(
         "dashboard_clinician.html",
-        {
-            "request": request,
-            "patients": [],
-            "role": "clinician",
-            "user_name": request.session.get("user_name"),
-            "active": "dashboard"
-        }
+        context
     )
 
 
@@ -36,14 +42,11 @@ async def new_patient_form(request: Request):
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
+    context = clinician_context(request, "new")
+
     return templates.TemplateResponse(
         "new_patient.html",
-        {
-            "request": request,
-            "role": "clinician",
-            "user_name": request.session.get("user_name"),
-            "active": "new"
-        }
+        context
     )
 
 

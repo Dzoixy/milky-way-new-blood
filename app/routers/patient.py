@@ -1,12 +1,12 @@
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-router = APIRouter(prefix="/clinician")
+router = APIRouter(prefix="/patient")
 templates = Jinja2Templates(directory="app/templates")
 
 
-def clinician_context(request: Request, active: str):
+def patient_context(request: Request, active: str):
     return {
         "request": request,
         "role": request.session.get("role"),
@@ -16,53 +16,34 @@ def clinician_context(request: Request, active: str):
 
 
 # -------------------------
-# Dashboard
+# Patient Dashboard (My Health)
 # -------------------------
-@router.get("/dashboard")
-async def clinician_dashboard(request: Request):
+@router.get("/health")
+async def patient_health(request: Request):
 
-    if request.session.get("role") != "clinician":
+    if request.session.get("role") != "patient":
         return RedirectResponse("/login", status_code=303)
 
-    context = clinician_context(request, "dashboard")
-    context["patients"] = []
+    context = patient_context(request, "health")
 
     return templates.TemplateResponse(
-        "dashboard_clinician.html",
+        "dashboard_patient.html",
         context
     )
 
 
 # -------------------------
-# New Patient (GET)
+# Patient Results
 # -------------------------
-@router.get("/new-patient")
-async def new_patient_form(request: Request):
+@router.get("/results")
+async def patient_results(request: Request):
 
-    if request.session.get("role") != "clinician":
+    if request.session.get("role") != "patient":
         return RedirectResponse("/login", status_code=303)
 
-    context = clinician_context(request, "new")
+    context = patient_context(request, "results")
 
     return templates.TemplateResponse(
-        "new_patient.html",
+        "patient_results.html",
         context
     )
-
-
-# -------------------------
-# New Patient (POST)
-# -------------------------
-@router.post("/new-patient")
-async def create_patient(
-    request: Request,
-    full_name: str = Form(...),
-    national_id: str = Form(...)
-):
-
-    if request.session.get("role") != "clinician":
-        return RedirectResponse("/login", status_code=303)
-
-    # save DB here
-
-    return RedirectResponse("/clinician/dashboard", status_code=303)
