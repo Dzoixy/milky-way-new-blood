@@ -3,78 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>Milky Way Clinical DSS</title>
-<link rel="stylesheet" href="/static/css/clinician.css">
-<style>
 
-.topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #000;
-    color: #fff;
-    padding: 15px 40px;
-}
+<link rel="stylesheet" href="/static/css/base.css">
 
-.brand {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-}
+{% if active == 'dashboard' %}
+<link rel="stylesheet" href="/static/css/dashboard.css">
+{% endif %}
 
-.brand-name {
-    font-size: 20px;
-    font-weight: bold;
-}
+{% if active == 'new' %}
+<link rel="stylesheet" href="/static/css/new_patient.css">
+{% endif %}
 
-.brand-sub {
-    font-size: 12px;
-    letter-spacing: 1px;
-}
+{% if active == 'health' or active == 'results' %}
+<link rel="stylesheet" href="/static/css/patient.css">
+{% endif %}
 
-.nav {
-    display: flex;
-    gap: 30px;
-}
-
-.nav a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    padding-bottom: 5px;
-}
-
-.nav a.active {
-    border-bottom: 2px solid #fff;
-}
-
-.user {
-    text-align: right;
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-.user .logout {
-    margin-left: 10px;
-    padding: 5px 10px;
-    border: 1px solid #fff;
-    text-decoration: none;
-    color: #fff;
-    font-size: 12px;
-}
-
-.container {
-    padding: 40px;
-}
-
-.footer {
-    text-align: center;
-    padding: 20px;
-    font-size: 12px;
-    background: #000;
-    color: #fff;
-}
-
-</style>
 </head>
 
 <body>
@@ -93,10 +36,11 @@
                class="{% if active=='dashboard' %}active{% endif %}">
                DASHBOARD
             </a>
-            <a href="/patient/new"
+            <a href="/clinician/new-patient"
                class="{% if active=='new' %}active{% endif %}">
                NEW PATIENT
             </a>
+
         {% elif role == "patient" %}
             <a href="/patient/health"
                class="{% if active=='health' %}active{% endif %}">
@@ -122,9 +66,9 @@
 
 </header>
 
-<div class="container">
-{% block content %}{% endblock %}
-</div>
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
 
 <footer class="footer">
     <div>Milky Way Clinical Support System — For clinical use only.</div>

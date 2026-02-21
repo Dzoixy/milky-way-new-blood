@@ -1,0 +1,91 @@
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI", Arial, sans-serif;
+}
+
+html,body{
+  height:100%;
+}
+
+body{
+  background:#e9e9e9;
+  color:#111;
+  display:flex;
+  flex-direction:column;
+}
+
+/* TOPBAR */
+.topbar{
+  background:#000;
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 70px;
+  color:#fff;
+}
+
+.brand-name{
+  font-size:14px;
+  letter-spacing:5px;
+  font-weight:700;
+}
+
+.brand-sub{
+  font-size:9px;
+  letter-spacing:3px;
+  opacity:.6;
+}
+
+.nav{
+  display:flex;
+  gap:55px;
+}
+
+.nav a{
+  text-decoration:none;
+  color:#9c9c9c;
+  font-size:12px;
+  letter-spacing:1px;
+  padding-bottom:18px;
+  border-bottom:2px solid transparent;
+}
+
+.nav a.active{
+  color:#fff;
+  border-bottom:2px solid #fff;
+}
+
+.user{
+  text-align:right;
+  font-size:11px;
+}
+
+.logout{
+  border:1px solid #777;
+  padding:5px 12px;
+  font-size:10px;
+  text-decoration:none;
+  color:#fff;
+  margin-left:12px;
+}
+
+/* CONTAINER */
+.container{
+  width:1080px;
+  margin:55px auto 70px auto;
+  flex:1;
+}
+
+/* FOOTER */
+.footer{
+  background:#000;
+  color:#aaa;
+  font-size:11px;
+  padding:18px 70px;
+  display:flex;
+  justify-content:space-between;
+}
