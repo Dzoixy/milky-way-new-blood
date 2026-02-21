@@ -9,7 +9,7 @@ templates = Jinja2Templates(directory="app/templates")
 @router.get("/dashboard")
 async def patient_dashboard(request: Request):
 
-    if request.session.get("role") != "Patient":
+    if request.session.get("role") != "patient":
         return RedirectResponse("/login", status_code=303)
 
     return templates.TemplateResponse(
