@@ -17,7 +17,13 @@ async def clinician_dashboard(request: Request):
 
     return templates.TemplateResponse(
         "dashboard_clinician.html",
-        {"request": request, "patients": []}
+        {
+            "request": request,
+            "patients": [],
+            "role": "clinician",
+            "user_name": request.session.get("user_name"),
+            "active": "dashboard"
+        }
     )
 
 
@@ -32,7 +38,12 @@ async def new_patient_form(request: Request):
 
     return templates.TemplateResponse(
         "new_patient.html",
-        {"request": request}
+        {
+            "request": request,
+            "role": "clinician",
+            "user_name": request.session.get("user_name"),
+            "active": "new"
+        }
     )
 
 
