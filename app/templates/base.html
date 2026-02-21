@@ -55,13 +55,8 @@
     </nav>
 
     <div class="user">
-        {% if role == "clinician" %}
-            CLINICIAN<br>
-        {% elif role == "patient" %}
-            PATIENT<br>
-        {% endif %}
-        {{ user_name }}
-        <a href="/logout" class="logout">LOG OUT</a>
+        <span class="user-name">{{ user_name }}</span>
+        <a href="/login" class="logout">LOG OUT</a>
     </div>
 
 </header>

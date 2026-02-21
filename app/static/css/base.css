@@ -89,3 +89,19 @@ body{
   display:flex;
   justify-content:space-between;
 }
+
+.user{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  font-size:12px;
+  color:#fff;
+}
+
+.logout{
+  border:1px solid #777;
+  padding:5px 12px;
+  font-size:10px;
+  text-decoration:none;
+  color:#fff;
+}
