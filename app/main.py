@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
-
+from starlette.responses import RedirectResponse
 from app.routers import auth, clinician, patient, risk
 from app.database.connection import engine, Base
 
