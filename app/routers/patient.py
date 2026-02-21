@@ -18,13 +18,13 @@ def patient_context(request: Request, active: str):
 # -------------------------
 # Patient Dashboard (My Health)
 # -------------------------
-@router.get("/health")
-async def patient_health(request: Request):
+@router.get("/dashboard")
+async def patient_dashboard(request: Request):
 
     if request.session.get("role") != "patient":
         return RedirectResponse("/login", status_code=303)
 
-    context = patient_context(request, "health")
+    context = patient_context(request, "dashboard")
 
     return templates.TemplateResponse(
         "dashboard_patient.html",

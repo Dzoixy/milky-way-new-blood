@@ -6,9 +6,15 @@
   font-family: "Segoe UI", Arial, sans-serif;
 }
 
+html, body{
+  height:100%;
+}
+
 body{
   background:#ededed;
   color:#111;
+  display:flex;
+  flex-direction:column;
 }
 
 /* ===================== TOPBAR ===================== */
@@ -18,24 +24,26 @@ body{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  padding:0 50px;
+  padding:0 60px;
   color:#fff;
 }
 
 .brand-name{
   letter-spacing:4px;
   font-weight:700;
+  font-size:15px;
 }
 
 .brand-sub{
-  font-size:11px;
+  font-size:10px;
   letter-spacing:2px;
   opacity:.6;
+  margin-top:2px;
 }
 
 .nav{
   display:flex;
-  gap:50px;
+  gap:60px;
 }
 
 .nav a{
@@ -43,8 +51,13 @@ body{
   color:#aaa;
   font-size:13px;
   letter-spacing:1px;
-  padding-bottom:12px;
+  padding-bottom:14px;
   border-bottom:3px solid transparent;
+  transition:.2s;
+}
+
+.nav a:hover{
+  color:#fff;
 }
 
 .nav a.active{
@@ -55,21 +68,23 @@ body{
 .user{
   text-align:right;
   font-size:12px;
+  line-height:1.4;
 }
 
 .logout{
   border:1px solid #777;
-  padding:6px 12px;
+  padding:6px 14px;
   font-size:11px;
   text-decoration:none;
   color:#fff;
-  margin-left:10px;
+  margin-left:15px;
 }
 
 /* ===================== CONTAINER ===================== */
 .container{
   max-width:1180px;
-  margin:40px auto;
+  margin:50px auto 60px auto;
+  flex:1;
 }
 
 /* ===================== PAGE TITLE ===================== */
@@ -88,14 +103,14 @@ body{
 .hr{
   height:2px;
   background:#111;
-  margin:20px 0 30px 0;
+  margin:25px 0 35px 0;
 }
 
 /* ===================== PANEL ===================== */
 .panel{
   border:1px solid #222;
-  background:#f8f8f8;
-  margin-bottom:30px;
+  background:#f5f5f5;
+  margin-bottom:35px;
 }
 
 .panel-head{
@@ -103,36 +118,11 @@ body{
   padding:14px 20px;
   font-size:12px;
   letter-spacing:1px;
-  background:#f2f2f2;
+  background:#ececec;
 }
 
 .panel-body{
-  padding:20px;
-}
-
-/* ===================== SEARCH ===================== */
-.search-row{
-  display:flex;
-  gap:10px;
-}
-
-.search-row input{
-  flex:1;
-  border:1px solid #222;
-  padding:10px;
-}
-
-.btn{
-  border:1px solid #000;
-  padding:8px 16px;
-  font-size:12px;
-  cursor:pointer;
-  background:#fff;
-}
-
-.btn-black{
-  background:#000;
-  color:#fff;
+  padding:25px;
 }
 
 /* ===================== TABLE ===================== */
@@ -148,7 +138,7 @@ thead{
 
 th, td{
   border:1px solid #222;
-  padding:10px;
+  padding:12px;
   font-size:13px;
 }
 
@@ -157,29 +147,22 @@ th{
   letter-spacing:1px;
 }
 
-.badge{
-  border:1px solid #000;
-  padding:4px 10px;
-  font-size:11px;
-  text-transform:uppercase;
-}
-
 /* ===================== SUMMARY ===================== */
 .summary-grid{
   display:flex;
-  gap:25px;
+  gap:30px;
 }
 
 .summary-box{
   flex:1;
   border:1px solid #222;
-  padding:30px;
+  padding:35px;
   background:#f8f8f8;
 }
 
 .summary-num{
-  font-size:40px;
-  margin-bottom:5px;
+  font-size:42px;
+  margin-bottom:8px;
 }
 
 .summary-label{
@@ -191,10 +174,10 @@ th{
 /* ===================== FORM TABS ===================== */
 .tabs{
   display:flex;
-  gap:40px;
+  gap:50px;
   border-bottom:2px solid #111;
-  padding-bottom:10px;
-  margin-bottom:25px;
+  padding-bottom:12px;
+  margin-bottom:30px;
 }
 
 .tabs span{
@@ -212,38 +195,72 @@ th{
 .form-grid-3{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
-  gap:25px;
-  margin-bottom:25px;
+  gap:30px;
+  margin-bottom:30px;
 }
 
 .form-grid-2{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:25px;
-  margin-bottom:25px;
+  gap:30px;
+  margin-bottom:30px;
 }
 
 label{
   font-size:12px;
   text-transform:uppercase;
-  margin-bottom:6px;
+  margin-bottom:8px;
   display:block;
 }
 
 input, select, textarea{
   width:100%;
-  padding:10px;
+  padding:12px;
   border:1px solid #222;
+  font-size:13px;
+  background:#fff;
 }
 
 textarea{
   min-height:120px;
 }
 
+/* ===================== BUTTONS ===================== */
+.btn{
+  border:1px solid #000;
+  padding:10px 20px;
+  font-size:12px;
+  cursor:pointer;
+  background:#fff;
+  transition:.2s;
+}
+
+.btn:hover{
+  background:#f1f1f1;
+}
+
+.btn-black{
+  background:#000;
+  color:#fff;
+}
+
+.btn-black:hover{
+  background:#222;
+}
+
 .form-actions{
-  margin-top:25px;
+  margin-top:30px;
   display:flex;
-  gap:15px;
+  gap:20px;
+}
+
+/* ===================== EMPTY BOX ===================== */
+.empty-box{
+  border:1px solid #000;
+  padding:40px;
+  background:#fff;
+  margin-top:30px;
+  font-size:14px;
 }
 
 /* ===================== FOOTER ===================== */
@@ -251,16 +268,7 @@ textarea{
   background:#000;
   color:#aaa;
   font-size:11px;
-  padding:18px 50px;
+  padding:18px 60px;
   display:flex;
   justify-content:space-between;
-  margin-top:60px;
-}
-
-.empty-box {
-    border: 1px solid #000;
-    padding: 30px;
-    background: #fff;
-    margin-top: 30px;
-    font-size: 14px;
 }
