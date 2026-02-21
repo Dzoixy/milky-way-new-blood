@@ -7,6 +7,8 @@ from datetime import date
 
 from app.database.connection import get_db
 from app.models.patient_model import Patient
+from app.models.visit_model import Visit
+from app.models.risk_result_model import RiskResult
 
 router = APIRouter(prefix="/clinician")
 templates = Jinja2Templates(directory="app/templates")
@@ -49,6 +51,80 @@ async def clinician_dashboard(
 
 
 # ==========================
+# View Patient Detail
+# ==========================
+@router.get("/patient/{patient_id}")
+async def view_patient(
+    request: Request,
+    patient_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+
+    if request.session.get("role") != "clinician":
+        return RedirectResponse("/login", status_code=303)
+
+    result = await db.execute(
+        select(Patient).where(Patient.id == patient_id)
+    )
+    patient = result.scalar_one_or_none()
+
+    if not patient:
+        return RedirectResponse("/clinician/dashboard", status_code=303)
+
+    visit_result = await db.execute(
+        select(Visit)
+        .where(Visit.patient_id == patient.id)
+        .order_by(Visit.created_at.desc())
+    )
+    visits = visit_result.scalars().all()
+
+    context = clinician_context(request, "dashboard")
+    context["patient"] = patient
+    context["visits"] = visits
+
+    return templates.TemplateResponse(
+        "patient_detail_clinician.html",
+        context
+    )
+
+
+# ==========================
+# View Visit Result
+# ==========================
+@router.get("/visit/{visit_id}/result")
+async def view_visit_result(
+    request: Request,
+    visit_id: int,
+    db: AsyncSession = Depends(get_db)
+):
+
+    if request.session.get("role") != "clinician":
+        return RedirectResponse("/login", status_code=303)
+
+    visit_result = await db.execute(
+        select(Visit).where(Visit.id == visit_id)
+    )
+    visit = visit_result.scalar_one_or_none()
+
+    if not visit:
+        return RedirectResponse("/clinician/dashboard", status_code=303)
+
+    risk_result = await db.execute(
+        select(RiskResult).where(RiskResult.visit_id == visit.id)
+    )
+    risk = risk_result.scalar_one_or_none()
+
+    context = clinician_context(request, "dashboard")
+    context["visit"] = visit
+    context["risk"] = risk
+
+    return templates.TemplateResponse(
+        "result_view_clinician.html",
+        context
+    )
+
+
+# ==========================
 # New Patient (GET)
 # ==========================
 @router.get("/new-patient")
@@ -81,7 +157,6 @@ async def create_patient(
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
-    # ตรวจ national id ซ้ำ
     result = await db.execute(
         select(Patient).where(Patient.national_id == national_id)
     )
