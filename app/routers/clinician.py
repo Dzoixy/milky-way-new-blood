@@ -2,54 +2,97 @@ from fastapi import APIRouter, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
-router = APIRouter(prefix="/clinician", tags=["clinician"])
+router = APIRouter(prefix="/clinician", tags=["Clinician"])
 templates = Jinja2Templates(directory="app/templates")
 
 
-@router.get("/new-patient")
-async def new_patient(request: Request):
+# =========================
+# Dashboard
+# =========================
+@router.get("/dashboard")
+async def clinician_dashboard(request: Request):
+
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
-    return templates.TemplateResponse("new_patient.html", {
-        "request": request
-    })
+    # ตัวอย่าง mock data
+    patients = []
+
+    return templates.TemplateResponse(
+        "dashboard_clinician.html",
+        {
+            "request": request,
+            "patients": patients
+        }
+    )
 
 
+# =========================
+# Add New Patient (GET)
+# =========================
+@router.get("/new-patient")
+async def new_patient_form(request: Request):
+
+    if request.session.get("role") != "clinician":
+        return RedirectResponse("/login", status_code=303)
+
+    return templates.TemplateResponse(
+        "new_patient.html",
+        {"request": request}
+    )
+
+
+# =========================
+# Add New Patient (POST)
+# =========================
 @router.post("/new-patient")
-async def save_patient(
+async def create_patient(
     request: Request,
     full_name: str = Form(...),
-    national_id: str = Form(...),
-    systolic: float = Form(...),
-    diastolic: float = Form(...),
-    glucose: float = Form(...),
-    cholesterol: float = Form(...),
-    age: int = Form(...),
-    chronic: str = Form("")
+    national_id: str = Form(...)
 ):
+
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
-    # ------------------------
-    # Risk Calculation (ตัวอย่าง logic)
-    # ------------------------
-    risk = 0
-
-    if systolic > 140:
-        risk += 20
-    if glucose > 126:
-        risk += 20
-    if cholesterol > 240:
-        risk += 20
-    if age > 60:
-        risk += 15
-    if "diabetes" in chronic.lower():
-        risk += 25
-
-    if risk > 100:
-        risk = 100
-
-    # TODO: save patient + visit to DB here
+    # TODO: บันทึก DB ตรงนี้
 
     return RedirectResponse("/clinician/dashboard", status_code=303)
+
+
+# =========================
+# View Patient
+# =========================
+@router.get("/patient/{patient_id}")
+async def view_patient(request: Request, patient_id: int):
+
+    if request.session.get("role") != "clinician":
+        return RedirectResponse("/login", status_code=303)
+
+    # TODO: ดึงข้อมูล patient จาก DB
+
+    return templates.TemplateResponse(
+        "patient_detail.html",
+        {
+            "request": request,
+            "patient_id": patient_id
+        }
+    )
+
+
+# =========================
+# New Visit
+# =========================
+@router.get("/patient/{patient_id}/new-visit")
+async def new_visit(request: Request, patient_id: int):
+
+    if request.session.get("role") != "clinician":
+        return RedirectResponse("/login", status_code=303)
+
+    return templates.TemplateResponse(
+        "new_visit.html",
+        {
+            "request": request,
+            "patient_id": patient_id
+        }
+    )
