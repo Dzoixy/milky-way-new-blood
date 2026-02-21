@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 class="page-title">PATIENT DETAIL</h2>
+<div class="hr"></div>
+
+<div class="panel">
+    <div class="panel-head">PATIENT INFORMATION</div>
+    <div class="panel-body">
+
+        <p><strong>Name:</strong> {{ patient.full_name }}</p>
+        <p><strong>National ID:</strong> {{ patient.national_id }}</p>
+        <p><strong>Date of Birth:</strong> {{ patient.date_of_birth }}</p>
+        <p><strong>Gender:</strong> {{ patient.gender }}</p>
+
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-head">VISIT HISTORY</div>
+    <div class="panel-body">
+
+        {% if visits %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>SBP</th>
+                    <th>DBP</th>
+                    <th>Risk %</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in visits %}
+                <tr>
+                    <td>{{ v.created_at.strftime("%Y-%m-%d %H:%M") }}</td>
+                    <td>{{ v.sbp }}</td>
+                    <td>{{ v.dbp }}</td>
+                    <td>{{ v.risk_score }}%</td>
+                    <td>
+                        <a href="/clinician/visit/{{ v.id }}/result" class="btn">
+                            VIEW
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty-box">
+            No visits recorded.
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
