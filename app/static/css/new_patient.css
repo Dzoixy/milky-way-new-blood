@@ -207,3 +207,8 @@ textarea{
     padding:0 20px;
   }
 }
+
+.btn-primary {
+    display: inline-block;
+    margin-top: 28px;   /* ระยะห่างจาก input */
+}

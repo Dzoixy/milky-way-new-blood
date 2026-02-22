@@ -54,10 +54,8 @@
             <span class="badge">{{ p.risk_level }}</span>
           </td>
           <td>
-            <!-- ✅ path ถูกต้อง -->
-            <a href="/clinician/patient/{{ p.id }}" class="btn">VIEW</a>
-            <a href="/clinician/patient/{{ p.id }}/new-visit" class="btn">
-              NEW VISIT
+            <a href="/clinician/new-patient?step=b" class="btn-primary">
+             NEXT: VITAL SIGNS →
             </a>
           </td>
         </tr>
