@@ -40,6 +40,25 @@ async def clinician_dashboard(
     result = await db.execute(select(Patient))
     patients = result.scalars().all()
 
+    # ดึง risk ล่าสุดของแต่ละ patient
+    for p in patients:
+        visit_result = await db.execute(
+            select(Visit)
+            .where(Visit.patient_id == p.id)
+            .order_by(Visit.created_at.desc())
+        )
+        last_visit = visit_result.scalar_one_or_none()
+
+        if last_visit:
+            risk_result = await db.execute(
+                select(RiskResult)
+                .where(RiskResult.visit_id == last_visit.id)
+            )
+            risk = risk_result.scalar_one_or_none()
+            p.risk_level = risk.risk_level if risk else "-"
+        else:
+            p.risk_level = "-"
+
     context = clinician_context(request, "dashboard")
     context["patients"] = patients
 
@@ -50,7 +69,7 @@ async def clinician_dashboard(
 
 
 # ==========================
-# STEP A - New Patient Form
+# New Patient Form
 # ==========================
 @router.get("/new-patient")
 async def new_patient_form(request: Request):
@@ -62,7 +81,7 @@ async def new_patient_form(request: Request):
 
 
 # ==========================
-# STEP A - Create Patient
+# Create Patient
 # ==========================
 @router.post("/new-patient/create")
 async def create_patient(
@@ -77,6 +96,9 @@ async def create_patient(
         return RedirectResponse("/login", status_code=303)
 
     user_id = request.session.get("user_id")
+
+    if not user_id:
+        return RedirectResponse("/login", status_code=303)
 
     result = await db.execute(
         select(Patient).where(Patient.national_id == national_id)
@@ -104,7 +126,7 @@ async def create_patient(
 
 
 # ==========================
-# STEP B - Visit Form
+# Visit Form
 # ==========================
 @router.get("/new-visit/{patient_id}")
 async def new_visit_form(
@@ -133,7 +155,7 @@ async def new_visit_form(
 
 
 # ==========================
-# STEP B - Create Visit + Risk
+# Create Visit + Risk
 # ==========================
 @router.post("/new-visit/{patient_id}")
 async def create_visit(
@@ -158,9 +180,8 @@ async def create_visit(
     await db.commit()
     await db.refresh(visit)
 
-    # ===== Simple Risk Logic =====
+    # Risk Logic
     risk_score = 0
-
     if sbp > 140:
         risk_score += 1
     if glucose > 126:
@@ -181,6 +202,7 @@ async def create_visit(
 
     db.add(risk)
     await db.commit()
+    await db.refresh(risk)
 
     return RedirectResponse(
         f"/clinician/visit/{visit.id}/result",
@@ -204,6 +226,9 @@ async def view_visit_result(
         select(Visit).where(Visit.id == visit_id)
     )
     visit = visit_result.scalar_one_or_none()
+
+    if not visit:
+        return RedirectResponse("/clinician/dashboard", status_code=303)
 
     risk_result = await db.execute(
         select(RiskResult).where(RiskResult.visit_id == visit.id)
