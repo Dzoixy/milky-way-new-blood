@@ -1,173 +1,138 @@
 /* ========================================
-   MILKY WAY – NEW PATIENT (Refined)
+   MILKY WAY – NEW PATIENT (Exact Style)
 ======================================== */
 
 :root{
-  --black:#111;
-  --light:#f7f7f7;
-  --mid:#9c9c9c;
-  --white:#ffffff;
+  --black:#000;
+  --light:#e9e9e9;
+  --white:#fff;
+  --mid:#9a9a9a;
 }
 
 /* ===== Layout ===== */
 
 .np-container{
-  max-width:1100px;
+  max-width:1200px;
   margin:60px auto 100px;
 }
 
 .breadcrumb{
   font-size:13px;
   color:#8c8c8c;
-  margin-bottom:14px;
+  margin-bottom:12px;
 }
 
 .np-title{
-  font-size:30px;
+  font-size:34px;
   font-weight:500;
   margin-bottom:20px;
 }
 
 .np-divider{
   height:2px;
-  background:var(--black);
-  margin-bottom:40px;
+  background:#000;
+  margin-bottom:35px;
 }
 
 /* ===== Tabs ===== */
 
 .np-tabs{
   display:flex;
-  gap:36px;
-  border-bottom:2px solid var(--black);
-  margin-bottom:35px;
+  gap:40px;
+  border-bottom:2px solid #000;
+  padding-bottom:8px;
+  margin-bottom:25px;
 }
 
 .tab{
   font-size:12px;
   letter-spacing:1px;
-  padding:12px 0;
-  color:var(--mid);
   text-decoration:none;
-  position:relative;
+  color:#b0b0b0;
+  padding:6px 0;
 }
 
 .tab.active{
-  color:var(--black);
+  color:#000;
   font-weight:600;
-}
-
-.tab.active::after{
-  content:"";
-  position:absolute;
-  bottom:-2px;
-  left:0;
-  width:100%;
-  height:2px;
-  background:var(--black);
 }
 
 /* ===== Panel ===== */
 
 .np-panel{
-  border:2px solid var(--black);
-  background:var(--white);  /* เอาเทาออก */
+  border:2px solid #000;
+  background:var(--light);
 }
 
 .np-panel-head{
-  padding:16px 24px;
-  border-bottom:2px solid var(--black);
+  padding:14px 20px;
+  border-bottom:2px solid #000;
   font-size:13px;
   letter-spacing:1px;
   font-weight:600;
-  background:#f3f3f3;
 }
 
 /* ===== Form ===== */
 
 .np-form{
-  padding:40px 36px 50px;
+  padding:28px 28px 35px;
 }
 
 .field label{
   display:block;
   font-size:12px;
-  letter-spacing:1px;
   font-weight:600;
-  margin-bottom:10px;
+  margin-bottom:8px;
+  letter-spacing:1px;
 }
 
 .field input,
 .field select,
 .field textarea{
   width:100%;
-  border:2px solid var(--black);
-  background:var(--white);
-  padding:13px 14px;
+  border:2px solid #000;
+  background:#fff;
+  padding:10px 12px;
   font-size:14px;
-  font-family:inherit;
   outline:none;
-  transition:0.15s ease;
 }
 
-.field input:focus,
-.field select:focus,
-.field textarea:focus{
-  background:#fafafa;
-}
-
-/* ===== Grid Systems ===== */
+/* ===== Grid ===== */
 
 .np-grid-1{
   display:grid;
   grid-template-columns:1fr;
-  gap:30px;
+  gap:25px;
 }
 
 .np-grid-2{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:30px 50px;
+  gap:25px 45px;
 }
 
 .np-grid-3{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
-  gap:30px 50px;
-}
-
-/* ===== Checkbox ===== */
-
-.checkbox{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  margin-top:12px;
-}
-
-.checkbox input{
-  width:16px;
-  height:16px;
-  accent-color:#000;
+  gap:25px 45px;
 }
 
 /* ===== Buttons ===== */
 
 .btn-row{
   display:flex;
-  gap:18px;
-  margin-top:45px;
+  gap:16px;
+  margin-top:30px;
 }
 
 .np-btn{
   background:#000;
   color:#fff;
-  border:2px solid #000;   /* เพิ่ม border ให้สมดุล */
-  padding:12px 28px;
+  border:2px solid #000;
+  padding:10px 24px;
   font-size:13px;
   letter-spacing:1px;
   cursor:pointer;
-  transition:0.2s;
 }
 
 .np-btn:hover{
@@ -176,14 +141,13 @@
 }
 
 .np-btn-light{
-  border:2px solid var(--black);
+  border:2px solid #000;
   background:#fff;
   color:#000;
-  padding:12px 26px;
+  padding:10px 22px;
   font-size:13px;
   text-decoration:none;
   cursor:pointer;
-  transition:0.2s;
 }
 
 .np-btn-light:hover{
@@ -191,11 +155,26 @@
   color:#fff;
 }
 
+/* ===== Checkbox ===== */
+
+.checkbox{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+}
+
+.checkbox input{
+  width:16px;
+  height:16px;
+  accent-color:#000;
+}
+
 /* ===== Textarea ===== */
 
 textarea{
   resize:vertical;
-  min-height:110px;
+  min-height:90px;
 }
 
 /* ===== Responsive ===== */
