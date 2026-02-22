@@ -124,16 +124,18 @@ async def view_visit_result(
     )
 
 
-# ==========================
-# New Patient (GET)
-# ==========================
 @router.get("/new-patient")
-async def new_patient_form(request: Request):
+async def new_patient_form(
+    request: Request,
+    step: str = "a"   # 👈 สำคัญ
+):
 
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
     context = clinician_context(request, "new")
+    context["step"] = step   # 👈 ใส่บรรทัดนี้
+
     return templates.TemplateResponse(
         "new_patient.html",
         context
