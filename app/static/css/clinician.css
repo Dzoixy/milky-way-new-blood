@@ -1,153 +1,274 @@
-/* Header */
-.dash-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* ===================== RESET ===================== */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
-.page-title {
-    font-size: 26px;
-    font-weight: 600;
+html, body{
+  height:100%;
 }
 
-.page-sub {
-    font-size: 13px;
-    color: #777;
+body{
+  background:#ededed;
+  color:#111;
+  display:flex;
+  flex-direction:column;
 }
 
-.divider {
-    height: 2px;
-    background: #000;
-    margin: 20px 0 30px;
+/* ===================== TOPBAR ===================== */
+.topbar{
+  background:#000;
+  height:72px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 60px;
+  color:#fff;
 }
 
-/* Panels */
-.panel {
-    border: 2px solid #000;
-    margin-bottom: 28px;
+.brand-name{
+  letter-spacing:4px;
+  font-weight:700;
+  font-size:15px;
 }
 
-.panel-head {
-    background: #f3f3f3;
-    padding: 10px 14px;
-    font-weight: 600;
-    font-size: 13px;
-    letter-spacing: 1px;
+.brand-sub{
+  font-size:10px;
+  letter-spacing:2px;
+  opacity:.6;
+  margin-top:2px;
 }
 
-.panel-body {
-    padding: 20px;
+.nav{
+  display:flex;
+  gap:60px;
 }
 
-.flex-between {
-    display: flex;
-    justify-content: space-between;
+.nav a{
+  text-decoration:none;
+  color:#aaa;
+  font-size:13px;
+  letter-spacing:1px;
+  padding-bottom:14px;
+  border-bottom:3px solid transparent;
+  transition:.2s;
 }
 
-.record-count {
-    font-size: 12px;
-    color: #888;
+.nav a:hover{
+  color:#fff;
 }
 
-/* Table */
-.clinical-table {
-    width: 100%;
-    border-collapse: collapse;
+.nav a.active{
+  color:#fff;
+  border-bottom:3px solid #fff;
 }
 
-.clinical-table th {
-    background: #000;
-    color: #fff;
-    padding: 10px;
-    font-size: 12px;
-    letter-spacing: 1px;
+.user{
+  text-align:right;
+  font-size:12px;
+  line-height:1.4;
 }
 
-.clinical-table td {
-    border: 1px solid #000;
-    padding: 10px;
-    font-size: 14px;
+.logout{
+  border:1px solid #777;
+  padding:6px 14px;
+  font-size:11px;
+  text-decoration:none;
+  color:#fff;
+  margin-left:15px;
 }
 
-/* Buttons */
-.btn-primary {
-    background: #000;
-    color: #fff;
-    padding: 10px 18px;
-    text-decoration: none;
-    border: 2px solid #000;
-    display: inline-block;
-    font-weight: 600;
-    transition: 0.2s;
+/* ===================== CONTAINER ===================== */
+.container{
+  max-width:1180px;
+  margin:50px auto 60px auto;
+  flex:1;
 }
 
-.btn-primary:hover {
-    background: #fff;
-    color: #000;
+/* ===================== PAGE TITLE ===================== */
+.page-title{
+  font-size:28px;
+  font-weight:500;
+  margin-bottom:6px;
 }
 
-.btn-outline {
-    background: #fff;
-    color: #000;
-    padding: 10px 18px;
-    border: 2px solid #000;
+.page-sub{
+  font-size:13px;
+  color:#666;
+  margin-bottom:30px;
 }
 
-.small {
-    padding: 6px 14px;
-    font-size: 12px;
+.hr{
+  height:2px;
+  background:#111;
+  margin:25px 0 35px 0;
 }
 
-/* Action buttons */
-.action-btn {
-    display: inline-block;
-    padding: 6px 14px;
-    border: 2px solid #000;
-    text-decoration: none; /* เอาเส้นใต้ทิ้ง */
-    color: #000;
-    font-weight: 600;
-    margin-right: 6px;
+/* ===================== PANEL ===================== */
+.panel{
+  border:1px solid #222;
+  background:#f5f5f5;
+  margin-bottom:35px;
 }
 
-.action-btn:hover {
-    background: #000;
-    color: #fff;
+.panel-head{
+  border-bottom:1px solid #222;
+  padding:14px 20px;
+  font-size:12px;
+  letter-spacing:1px;
+  background:#ececec;
 }
 
-/* Risk badge */
-.risk-badge {
-    border: 1px solid #000;
-    padding: 3px 8px;
-    font-size: 11px;
-    font-weight: 600;
-    display: inline-block;
+.panel-body{
+  padding:25px;
 }
 
-/* Summary */
-.summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+/* ===================== TABLE ===================== */
+table{
+  width:100%;
+  border-collapse:collapse;
 }
 
-.summary-box {
-    border: 2px solid #000;
-    padding: 25px;
-    text-align: center;
+thead{
+  background:#000;
+  color:#fff;
 }
 
-.summary-num {
-    font-size: 36px;
-    font-weight: 600;
+th, td{
+  border:1px solid #222;
+  padding:12px;
+  font-size:13px;
 }
 
-.summary-label {
-    font-size: 12px;
-    letter-spacing: 1px;
-    color: #666;
+th{
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
-.empty-row {
-    text-align: center;
-    padding: 20px;
+/* ===================== SUMMARY ===================== */
+.summary-grid{
+  display:flex;
+  gap:30px;
+}
+
+.summary-box{
+  flex:1;
+  border:1px solid #222;
+  padding:35px;
+  background:#f8f8f8;
+}
+
+.summary-num{
+  font-size:42px;
+  margin-bottom:8px;
+}
+
+.summary-label{
+  font-size:11px;
+  text-transform:uppercase;
+  color:#555;
+}
+
+/* ===================== FORM TABS ===================== */
+.tabs{
+  display:flex;
+  gap:50px;
+  border-bottom:2px solid #111;
+  padding-bottom:12px;
+  margin-bottom:30px;
+}
+
+.tabs span{
+  font-size:12px;
+  letter-spacing:1px;
+  color:#999;
+}
+
+.tabs .active{
+  color:#000;
+  font-weight:600;
+}
+
+/* ===================== FORM GRID ===================== */
+.form-grid-3{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:30px;
+  margin-bottom:30px;
+}
+
+.form-grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:30px;
+  margin-bottom:30px;
+}
+
+label{
+  font-size:12px;
+  text-transform:uppercase;
+  margin-bottom:8px;
+  display:block;
+}
+
+input, select, textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #222;
+  font-size:13px;
+  background:#fff;
+}
+
+textarea{
+  min-height:120px;
+}
+
+/* ===================== BUTTONS ===================== */
+.btn{
+  border:1px solid #000;
+  padding:10px 20px;
+  font-size:12px;
+  cursor:pointer;
+  background:#fff;
+  transition:.2s;
+}
+
+.btn:hover{
+  background:#f1f1f1;
+}
+
+.btn-black{
+  background:#000;
+  color:#fff;
+}
+
+.btn-black:hover{
+  background:#222;
+}
+
+.form-actions{
+  margin-top:30px;
+  display:flex;
+  gap:20px;
+}
+
+/* ===================== EMPTY BOX ===================== */
+.empty-box{
+  border:1px solid #000;
+  padding:40px;
+  background:#fff;
+  margin-top:30px;
+  font-size:14px;
+}
+
+/* ===================== FOOTER ===================== */
+.footer{
+  background:#000;
+  color:#aaa;
+  font-size:11px;
+  padding:18px 60px;
+  display:flex;
+  justify-content:space-between;
 }

@@ -226,3 +226,30 @@ a {
     letter-spacing: 1px;
     color: #666;
 }
+
+/* =========================
+   SEARCH PANEL FIX
+========================= */
+
+.search-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.search-row input {
+    flex: 1;
+    padding: 12px 14px;
+    border: 2px solid #000;
+    font-size: 14px;
+}
+
+.search-row input:focus {
+    outline: none;
+    background: #f8f8f8;
+}
+
+.search-row .btn-primary,
+.search-row .btn-outline {
+    padding: 10px 20px;
+}
