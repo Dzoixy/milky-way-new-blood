@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="np-container">
+
+  <h1 class="np-title">
+    New Visit – {{ patient.full_name }}
+  </h1>
+
+  <div class="np-divider"></div>
+
+  <form method="post" action="/clinician/new-visit/{{ patient.id }}">
+
+    <div class="np-grid-3">
+      <div class="field">
+        <label>SYSTOLIC BP *</label>
+        <input type="number" name="sbp" required>
+      </div>
+
+      <div class="field">
+        <label>DIASTOLIC BP *</label>
+        <input type="number" name="dbp" required>
+      </div>
+
+      <div class="field">
+        <label>FASTING GLUCOSE *</label>
+        <input type="number" name="glucose" required>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button type="submit" class="np-btn">
+        CALCULATE RISK
+      </button>
+    </div>
+
+  </form>
+
+</div>
+
+{% endblock %}
