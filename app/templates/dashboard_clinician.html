@@ -1,105 +1,117 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div style="display:flex; justify-content:space-between; align-items:center;">
+<div class="dash-header">
     <div>
         <div class="page-title">Dashboard</div>
         <div class="page-sub">{{ current_date }}</div>
     </div>
 
-    <a href="/clinician/new-patient" class="btn btn-black">
-        NEW PATIENT
+    <a href="/clinician/new-patient" class="btn-primary">
+        ADD NEW PATIENT
     </a>
 </div>
 
-<div class="hr"></div>
+<div class="divider"></div>
+
 
 <!-- ===================== -->
 <!-- PATIENT SEARCH -->
 <!-- ===================== -->
 <div class="panel">
-  <div class="panel-head">PATIENT SEARCH</div>
-  <div class="panel-body">
-    <div class="search-row">
-      <input type="text" placeholder="Search by name or National ID...">
-      <button class="btn btn-black">SEARCH</button>
-      <button class="btn">CLEAR</button>
+    <div class="panel-head">PATIENT SEARCH</div>
+    <div class="panel-body">
+        <div class="search-row">
+            <input type="text" placeholder="Search by name or National ID...">
+            <button class="btn-primary small">SEARCH</button>
+            <button class="btn-outline small">CLEAR</button>
+        </div>
     </div>
-  </div>
 </div>
+
 
 <!-- ===================== -->
 <!-- PATIENT LIST -->
 <!-- ===================== -->
 <div class="panel">
-  <div class="panel-head">PATIENT LIST</div>
-  <div class="panel-body">
-    <table>
-      <thead>
-        <tr>
-          <th>Patient Name</th>
-          <th>National ID</th>
-          <th>Last Visit</th>
-          <th>Risk Level</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-      {% for p in patients %}
-        <tr>
-          <td>{{ p.name }}</td>
-          <td>{{ p.national_id }}</td>
-          <td>{{ p.last_visit }}</td>
-          <td>
-            <span class="badge">{{ p.risk_level }}</span>
-          </td>
-          <td>
-            <a href="/clinician/new-patient?step=b" class="btn-primary">
-             NEXT: VITAL SIGNS →
-            </a>
-          </td>
-        </tr>
-      {% else %}
-        <tr>
-          <td colspan="5" style="text-align:center; padding:20px;">
-            No patients yet.
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
+    <div class="panel-head flex-between">
+        <span>PATIENT LIST</span>
+        <span class="record-count">{{ patients|length }} RECORDS</span>
+    </div>
+
+    <div class="panel-body">
+        <table class="clinical-table">
+            <thead>
+                <tr>
+                    <th>PATIENT NAME</th>
+                    <th>NATIONAL ID</th>
+                    <th>LAST VISIT</th>
+                    <th>RISK LEVEL</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for p in patients %}
+                <tr>
+                    <td>{{ p.full_name }}</td>
+                    <td>{{ p.national_id }}</td>
+                    <td>{{ p.last_visit or '-' }}</td>
+                    <td>
+                        <span class="risk-badge {{ p.risk_level|lower }}">
+                            {{ p.risk_level or 'N/A' }}
+                        </span>
+                    </td>
+                    <td class="table-actions">
+                        <a href="/clinician/patient/{{ p.id }}" class="action-btn">
+                            VIEW
+                        </a>
+                        <a href="/clinician/patient/{{ p.id }}/new-visit" class="action-btn">
+                            NEW VISIT
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="empty-row">
+                        No patients yet.
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
+
 
 <!-- ===================== -->
 <!-- SUMMARY -->
 <!-- ===================== -->
 <div class="panel">
-  <div class="panel-head">SUMMARY STATISTICS</div>
-  <div class="panel-body">
-    <div class="summary-grid">
+    <div class="panel-head">SUMMARY STATISTICS</div>
+    <div class="panel-body">
+        <div class="summary-grid">
 
-      <div class="summary-box">
-        <div class="summary-num">{{ patients|length }}</div>
-        <div class="summary-label">TOTAL PATIENTS</div>
-      </div>
+            <div class="summary-box">
+                <div class="summary-num">{{ patients|length }}</div>
+                <div class="summary-label">TOTAL PATIENTS</div>
+            </div>
 
-      <div class="summary-box">
-        <div class="summary-num">
-          {{ patients | selectattr("risk_level","in",["HIGH","VERY HIGH"]) | list | length }}
+            <div class="summary-box">
+                <div class="summary-num">
+                    {{ patients | selectattr("risk_level","in",["HIGH","VERY HIGH"]) | list | length }}
+                </div>
+                <div class="summary-label">HIGH / VERY HIGH RISK</div>
+            </div>
+
+            <div class="summary-box">
+                <div class="summary-num">
+                    {{ patients | selectattr("risk_level","in",["LOW","MODERATE"]) | list | length }}
+                </div>
+                <div class="summary-label">LOW / MODERATE RISK</div>
+            </div>
+
         </div>
-        <div class="summary-label">HIGH / VERY HIGH RISK</div>
-      </div>
-
-      <div class="summary-box">
-        <div class="summary-num">
-          {{ patients | selectattr("risk_level","in",["LOW","MODERATE"]) | list | length }}
-        </div>
-        <div class="summary-label">LOW / MODERATE RISK</div>
-      </div>
-
     </div>
-  </div>
 </div>
 
 {% endblock %}

@@ -1,8 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% set current = step %}
-
 <div class="np-container">
 
   <div class="breadcrumb">Dashboard / New Patient</div>
@@ -12,13 +10,14 @@
 
   <!-- Tabs -->
   <div class="np-tabs">
-    <a href="?step=a" class="tab {{ 'active' if step=='a' }}">A. BASIC INFO</a>
-    <a href="?step=b" class="tab {{ 'active' if step=='b' }}">B. VITAL SIGNS</a>
-    <a href="?step=c" class="tab {{ 'active' if step=='c' }}">C. LIFESTYLE</a>
-    <a href="?step=d" class="tab {{ 'active' if step=='d' }}">D. MEDICAL HISTORY</a>
+    <a href="/clinician/new-patient?step=a" class="tab {{ 'active' if step=='a' }}">A. BASIC INFO</a>
+    <a href="/clinician/new-patient?step=b" class="tab {{ 'active' if step=='b' }}">B. VITAL SIGNS</a>
+    <a href="/clinician/new-patient?step=c" class="tab {{ 'active' if step=='c' }}">C. LIFESTYLE</a>
+    <a href="/clinician/new-patient?step=d" class="tab {{ 'active' if step=='d' }}">D. MEDICAL HISTORY</a>
   </div>
 
   <div class="np-panel">
+
     <div class="np-panel-head">
       {% if step=='a' %}A. BASIC INFORMATION{% endif %}
       {% if step=='b' %}B. VITAL SIGNS & LABORATORY VALUES{% endif %}
@@ -26,126 +25,146 @@
       {% if step=='d' %}D. MEDICAL HISTORY{% endif %}
     </div>
 
-    <form method="post" class="np-form">
+    <!-- ================= A ================= -->
+    {% if step=='a' %}
+    <div class="np-grid-2">
+      <div class="field">
+        <label>FULL NAME *</label>
+        <input type="text" required>
+      </div>
+      <div class="field">
+        <label>NATIONAL ID *</label>
+        <input type="text" required>
+      </div>
+      <div class="field">
+        <label>DATE OF BIRTH *</label>
+        <input type="date" required>
+      </div>
+      <div class="field">
+        <label>GENDER *</label>
+        <select required>
+          <option value="">– Select –</option>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+      </div>
+    </div>
 
-      {% if step=='a' %}
-      <div class="np-grid-2">
-        <div class="field">
-          <label>FULL NAME *</label>
-          <input type="text" name="full_name" required>
-        </div>
-        <div class="field">
-          <label>NATIONAL ID *</label>
-          <input type="text" name="national_id" required>
-        </div>
-        <div class="field">
-          <label>DATE OF BIRTH *</label>
-          <input type="date" name="date_of_birth" required>
-        </div>
-        <div class="field">
-          <label>GENDER *</label>
-          <select name="gender" required>
-            <option value="">– Select –</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </div>
-      </div>
-      <button formaction="?step=b" class="np-btn">NEXT: VITAL SIGNS →</button>
-      {% endif %}
+    <div class="btn-row">
+      <a href="/clinician/new-patient?step=b" class="np-btn">
+        NEXT: VITAL SIGNS →
+      </a>
+    </div>
+    {% endif %}
 
-      {% if step=='b' %}
-      <div class="np-grid-3">
-        <div class="field">
-          <label>SYSTOLIC BP (MMHG) *</label>
-          <input type="number" name="sbp" placeholder="e.g. 130" required>
-        </div>
-        <div class="field">
-          <label>DIASTOLIC BP (MMHG) *</label>
-          <input type="number" name="dbp" placeholder="e.g. 85" required>
-        </div>
-        <div class="field">
-          <label>FASTING GLUCOSE (MG/DL) *</label>
-          <input type="number" name="glucose" placeholder="e.g. 95" required>
-        </div>
-        <div class="field">
-          <label>HBA1C (%)</label>
-          <input type="number" step="0.1" name="hba1c">
-        </div>
-        <div class="field">
-          <label>TOTAL CHOLESTEROL (MG/DL)</label>
-          <input type="number" name="total_chol">
-        </div>
-        <div class="field">
-          <label>LDL (MG/DL)</label>
-          <input type="number" name="ldl">
-        </div>
-        <div class="field">
-          <label>HDL (MG/DL)</label>
-          <input type="number" name="hdl">
-        </div>
-        <div class="field">
-          <label>TRIGLYCERIDES (MG/DL)</label>
-          <input type="number" name="tg">
-        </div>
-      </div>
-      <div class="btn-row">
-        <a href="?step=a" class="np-btn-light">← BACK</a>
-        <button formaction="?step=c" class="np-btn">NEXT: LIFESTYLE →</button>
-      </div>
-      {% endif %}
 
-      {% if step=='c' %}
-      <div class="np-grid-2">
-        <div class="field">
-          <label>SMOKING STATUS</label>
-          <div class="checkbox">
-            <input type="checkbox" name="smoker">
-            <span>Current Smoker</span>
-          </div>
-        </div>
-        <div class="field">
-          <label>EXERCISE FREQUENCY</label>
-          <select name="exercise">
-            <option>None / Sedentary</option>
-            <option>1–2 days/week</option>
-            <option>3–4 days/week</option>
-            <option>5+ days/week</option>
-          </select>
-        </div>
+    <!-- ================= B ================= -->
+    {% if step=='b' %}
+    <div class="np-grid-3">
+      <div class="field">
+        <label>SYSTOLIC BP (MMHG) *</label>
+        <input type="number" placeholder="e.g. 130">
       </div>
-      <div class="btn-row">
-        <a href="?step=b" class="np-btn-light">← BACK</a>
-        <button formaction="?step=d" class="np-btn">NEXT: MEDICAL HISTORY →</button>
+      <div class="field">
+        <label>DIASTOLIC BP (MMHG) *</label>
+        <input type="number" placeholder="e.g. 85">
       </div>
-      {% endif %}
+      <div class="field">
+        <label>FASTING GLUCOSE (MG/DL) *</label>
+        <input type="number" placeholder="e.g. 95">
+      </div>
+      <div class="field">
+        <label>HBA1C (%)</label>
+        <input type="number" step="0.1">
+      </div>
+      <div class="field">
+        <label>TOTAL CHOLESTEROL (MG/DL)</label>
+        <input type="number">
+      </div>
+      <div class="field">
+        <label>LDL (MG/DL)</label>
+        <input type="number">
+      </div>
+      <div class="field">
+        <label>HDL (MG/DL)</label>
+        <input type="number">
+      </div>
+      <div class="field">
+        <label>TRIGLYCERIDES (MG/DL)</label>
+        <input type="number">
+      </div>
+    </div>
 
-      {% if step=='d' %}
+    <div class="btn-row">
+      <a href="/clinician/new-patient?step=a" class="np-btn-light">← BACK</a>
+      <a href="/clinician/new-patient?step=c" class="np-btn">
+        NEXT: LIFESTYLE →
+      </a>
+    </div>
+    {% endif %}
+
+
+    <!-- ================= C ================= -->
+    {% if step=='c' %}
+    <div class="np-grid-2">
+      <div class="field">
+        <label>SMOKING STATUS</label>
+        <div class="checkbox">
+          <input type="checkbox">
+          <span>Current Smoker</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>EXERCISE FREQUENCY</label>
+        <select>
+          <option>None / Sedentary</option>
+          <option>1–2 days/week</option>
+          <option>3–4 days/week</option>
+          <option>5+ days/week</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <a href="/clinician/new-patient?step=b" class="np-btn-light">← BACK</a>
+      <a href="/clinician/new-patient?step=d" class="np-btn">
+        NEXT: MEDICAL HISTORY →
+      </a>
+    </div>
+    {% endif %}
+
+
+    <!-- ================= D ================= -->
+    {% if step=='d' %}
+    <form method="post" action="/clinician/new-patient">
       <div class="np-grid-1">
         <div class="field">
           <label>CHRONIC DISEASES</label>
-          <textarea name="chronic" rows="3"></textarea>
+          <textarea rows="3"></textarea>
         </div>
         <div class="field">
           <label>FAMILY HISTORY</label>
-          <textarea name="family" rows="3"></textarea>
+          <textarea rows="3"></textarea>
         </div>
         <div class="field">
           <label>DRUG ALLERGIES / INTOLERANCES</label>
-          <textarea name="allergies" rows="3"></textarea>
+          <textarea rows="3"></textarea>
         </div>
         <div class="field">
           <label>CLINICIAN NOTES</label>
-          <textarea name="notes" rows="3"></textarea>
+          <textarea rows="3"></textarea>
         </div>
       </div>
-      <div class="btn-row">
-        <a href="?step=c" class="np-btn-light">← BACK</a>
-        <button class="np-btn">CALCULATE RISK & SAVE VISIT</button>
-      </div>
-      {% endif %}
 
+      <div class="btn-row">
+        <a href="/clinician/new-patient?step=c" class="np-btn-light">← BACK</a>
+        <button type="submit" class="np-btn">
+          CALCULATE RISK & SAVE VISIT
+        </button>
+      </div>
     </form>
+    {% endif %}
+
   </div>
 </div>
 
