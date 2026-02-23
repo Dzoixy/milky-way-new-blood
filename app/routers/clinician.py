@@ -72,13 +72,20 @@ async def clinician_dashboard(
 # New Patient Form
 # ==========================
 @router.get("/new-patient")
-async def new_patient_form(request: Request):
+async def new_patient_form(
+    request: Request,
+    step: str = "a"  #  ต้องมี
+):
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
     context = clinician_context(request, "new")
-    return templates.TemplateResponse("new_patient.html", context)
+    context["step"] = step  #  ต้องใส่กลับมา
 
+    return templates.TemplateResponse(
+        "new_patient.html",
+        context
+    )
 
 # ==========================
 # Create Patient
