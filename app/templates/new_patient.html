@@ -7,7 +7,6 @@
   <h1 class="np-title">Add New Patient</h1>
   <div class="np-divider"></div>
 
-  <!-- Tabs -->
   <div class="np-tabs">
     <a href="/clinician/new-patient?step=a" class="tab {{ 'active' if step=='a' }}">A. BASIC INFO</a>
     <a href="/clinician/new-patient?step=b" class="tab {{ 'active' if step=='b' }}">B. VITAL SIGNS</a>
@@ -19,76 +18,83 @@
 
     <div class="np-panel-head">
       {% if step=='a' %}A. BASIC INFORMATION{% endif %}
-      {% if step=='b' %}B. VITAL SIGNS & LABORATORY VALUES{% endif %}
-      {% if step=='c' %}C. LIFESTYLE FACTORS{% endif %}
       {% if step=='d' %}D. MEDICAL HISTORY{% endif %}
     </div>
 
-    <!-- ================= FORM ครอบทุก Step ================= -->
-    <form method="post" action="/clinician/new-patient">
-
-    <!-- ================= A ================= -->
+    <!-- STEP A -->
     {% if step=='a' %}
-    <div class="np-grid-2">
-      <div class="field">
-        <label>FULL NAME *</label>
-        <input type="text" name="full_name" required>
-      </div>
-      <div class="field">
-        <label>NATIONAL ID *</label>
-        <input type="text" name="national_id" required>
-      </div>
-      <div class="field">
-        <label>DATE OF BIRTH *</label>
-        <input type="date" name="date_of_birth" required>
-      </div>
-      <div class="field">
-        <label>GENDER *</label>
-        <select name="gender" required>
-          <option value="">– Select –</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
-      </div>
-    </div>
+    <form method="post" action="/clinician/new-patient/create">
 
-    <div class="btn-row">
-      <button type="submit" class="np-btn">
-        NEXT →
-      </button>
-    </div>
-    {% endif %}
+      <div class="np-grid-2">
+        <div class="field">
+          <label>FULL NAME *</label>
+          <input type="text" name="full_name" required>
+        </div>
 
+        <div class="field">
+          <label>NATIONAL ID *</label>
+          <input type="text" name="national_id" required>
+        </div>
 
-    <!-- ================= D ================= -->
-    {% if step=='d' %}
-    <div class="np-grid-1">
-      <div class="field">
-        <label>CHRONIC DISEASES</label>
-        <textarea name="chronic"></textarea>
-      </div>
-      <div class="field">
-        <label>FAMILY HISTORY</label>
-        <textarea name="family"></textarea>
-      </div>
-      <div class="field">
-        <label>DRUG ALLERGIES</label>
-        <textarea name="allergies"></textarea>
-      </div>
-      <div class="field">
-        <label>CLINICIAN NOTES</label>
-        <textarea name="notes"></textarea>
-      </div>
-    </div>
+        <div class="field">
+          <label>DATE OF BIRTH *</label>
+          <input type="date" name="date_of_birth" required>
+        </div>
 
-    <div class="btn-row">
-      <button type="submit" class="np-btn">
-        CALCULATE RISK & SAVE VISIT
-      </button>
-    </div>
-    {% endif %}
+        <div class="field">
+          <label>GENDER *</label>
+          <select name="gender" required>
+            <option value="">– Select –</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="np-btn">
+          NEXT →
+        </button>
+      </div>
 
     </form>
+    {% endif %}
+
+
+    <!-- STEP D (ใช้ route new-visit แยกต่างหาก) -->
+    {% if step=='d' %}
+    <form method="post" action="/clinician/new-visit/{{ patient.id }}">
+
+      <div class="np-grid-1">
+        <div class="field">
+          <label>CHRONIC DISEASES</label>
+          <textarea name="chronic"></textarea>
+        </div>
+
+        <div class="field">
+          <label>FAMILY HISTORY</label>
+          <textarea name="family"></textarea>
+        </div>
+
+        <div class="field">
+          <label>DRUG ALLERGIES</label>
+          <textarea name="allergies"></textarea>
+        </div>
+
+        <div class="field">
+          <label>CLINICIAN NOTES</label>
+          <textarea name="notes"></textarea>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="np-btn">
+          CALCULATE RISK & SAVE VISIT
+        </button>
+      </div>
+
+    </form>
+    {% endif %}
 
   </div>
 </div>
