@@ -1,5 +1,5 @@
 /* ========================================
-   MILKY WAY – NEW PATIENT (Exact Style)
+   MILKY WAY – NEW PATIENT (Balanced Layout)
 ======================================== */
 
 :root{
@@ -13,35 +13,35 @@
 
 .np-container{
   max-width:1200px;
-  margin:60px auto 100px;
+  margin:70px auto 120px;
 }
 
 .breadcrumb{
   font-size:13px;
   color:#8c8c8c;
-  margin-bottom:12px;
+  margin-bottom:16px;
 }
 
 .np-title{
   font-size:34px;
   font-weight:500;
-  margin-bottom:20px;
+  margin-bottom:25px;
 }
 
 .np-divider{
   height:2px;
   background:#000;
-  margin-bottom:35px;
+  margin-bottom:45px;
 }
 
 /* ===== Tabs ===== */
 
 .np-tabs{
   display:flex;
-  gap:40px;
+  gap:50px;
   border-bottom:2px solid #000;
-  padding-bottom:8px;
-  margin-bottom:25px;
+  padding-bottom:12px;
+  margin-bottom:40px;
 }
 
 .tab{
@@ -49,7 +49,7 @@
   letter-spacing:1px;
   text-decoration:none;
   color:#b0b0b0;
-  padding:6px 0;
+  padding:8px 0;
 }
 
 .tab.active{
@@ -62,27 +62,29 @@
 .np-panel{
   border:2px solid #000;
   background:var(--light);
+  padding:35px 45px 45px;   /* ⭐ แก้ปัญหาชิดขอบ */
 }
 
 .np-panel-head{
-  padding:14px 20px;
+  padding:14px 0 18px;
   border-bottom:2px solid #000;
   font-size:13px;
   letter-spacing:1px;
   font-weight:600;
+  margin-bottom:30px;      /* ⭐ เพิ่มช่องว่างใต้หัว */
 }
 
 /* ===== Form ===== */
 
-.np-form{
-  padding:28px 28px 35px;
+.field{
+  margin-bottom:5px;
 }
 
 .field label{
   display:block;
   font-size:12px;
   font-weight:600;
-  margin-bottom:8px;
+  margin-bottom:10px;
   letter-spacing:1px;
 }
 
@@ -92,7 +94,7 @@
   width:100%;
   border:2px solid #000;
   background:#fff;
-  padding:10px 12px;
+  padding:12px 14px;   /* ⭐ เพิ่ม padding */
   font-size:14px;
   outline:none;
 }
@@ -102,37 +104,38 @@
 .np-grid-1{
   display:grid;
   grid-template-columns:1fr;
-  gap:25px;
+  gap:30px;
 }
 
 .np-grid-2{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:25px 45px;
+  gap:30px 60px;    /* ⭐ ขยายแนวนอน */
 }
 
 .np-grid-3{
   display:grid;
   grid-template-columns:1fr 1fr 1fr;
-  gap:25px 45px;
+  gap:30px 60px;
 }
 
 /* ===== Buttons ===== */
 
 .btn-row{
   display:flex;
-  gap:16px;
-  margin-top:30px;
+  gap:18px;
+  margin-top:45px;     /* ⭐ ดันลง */
 }
 
 .np-btn{
   background:#000;
   color:#fff;
   border:2px solid #000;
-  padding:10px 24px;
+  padding:12px 28px;
   font-size:13px;
   letter-spacing:1px;
   cursor:pointer;
+  transition:0.2s;
 }
 
 .np-btn:hover{
@@ -144,10 +147,11 @@
   border:2px solid #000;
   background:#fff;
   color:#000;
-  padding:10px 22px;
+  padding:12px 26px;
   font-size:13px;
   text-decoration:none;
   cursor:pointer;
+  transition:0.2s;
 }
 
 .np-btn-light:hover{
@@ -160,8 +164,8 @@
 .checkbox{
   display:flex;
   align-items:center;
-  gap:10px;
-  margin-top:10px;
+  gap:12px;
+  margin-top:12px;
 }
 
 .checkbox input{
@@ -174,7 +178,7 @@
 
 textarea{
   resize:vertical;
-  min-height:90px;
+  min-height:110px;
 }
 
 /* ===== Responsive ===== */
@@ -193,5 +197,9 @@ textarea{
 
   .np-container{
     padding:0 20px;
+  }
+
+  .np-panel{
+    padding:30px;
   }
 }
