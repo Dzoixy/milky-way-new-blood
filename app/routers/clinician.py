@@ -88,7 +88,11 @@ async def create_patient(
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
+    user_id = request.session.get("user_id")
     org_id = request.session.get("organization_id")
+
+    if not user_id:
+        raise HTTPException(status_code=400, detail="Missing user_id")
 
     if not org_id:
         raise HTTPException(status_code=400, detail="Missing organization_id")
@@ -106,6 +110,7 @@ async def create_patient(
                 national_id=national_id.strip(),
                 date_of_birth=dob,
                 gender=gender,
+                user_id=user_id,              # ✅ ใส่ตรงนี้
                 organization_id=org_id
             )
 
