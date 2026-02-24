@@ -9,20 +9,15 @@
 
   <div class="np-tabs">
     <a href="/clinician/new-patient?step=a" class="tab {{ 'active' if step=='a' }}">A. BASIC INFO</a>
-    <a href="/clinician/new-patient?step=b" class="tab {{ 'active' if step=='b' }}">B. VITAL SIGNS</a>
-    <a href="/clinician/new-patient?step=c" class="tab {{ 'active' if step=='c' }}">C. LIFESTYLE</a>
-    <a href="/clinician/new-patient?step=d" class="tab {{ 'active' if step=='d' }}">D. MEDICAL HISTORY</a>
+    <a href="/clinician/new-patient?step=b&patient_id={{ patient.id if patient }}" class="tab {{ 'active' if step=='b' }}">B. VITAL SIGNS</a>
+    <a href="/clinician/new-patient?step=c&patient_id={{ patient.id if patient }}" class="tab {{ 'active' if step=='c' }}">C. LIFESTYLE</a>
+    <a href="/clinician/new-patient?step=d&patient_id={{ patient.id if patient }}" class="tab {{ 'active' if step=='d' }}">D. MEDICAL HISTORY</a>
   </div>
 
   <div class="np-panel">
 
-    <div class="np-panel-head">
-      {% if step=='a' %}A. BASIC INFORMATION{% endif %}
-      {% if step=='d' %}D. MEDICAL HISTORY{% endif %}
-    </div>
-
-    <!-- STEP A -->
-    {% if step=='a' %}
+    <!-- ================= STEP A ================= -->
+    {% if step == 'a' %}
     <form method="post" action="/clinician/new-patient/create">
 
       <div class="np-grid-2">
@@ -52,18 +47,83 @@
       </div>
 
       <div class="btn-row">
-        <button type="submit" class="np-btn">
-          NEXT →
-        </button>
+        <button type="submit" class="np-btn">NEXT →</button>
       </div>
 
     </form>
     {% endif %}
 
 
-    <!-- STEP D (ใช้ route new-visit แยกต่างหาก) -->
-    {% if step=='d' %}
-    <form method="post" action="/clinician/new-visit/{{ patient.id }}">
+    <!-- ================= STEP B ================= -->
+    {% if step == 'b' and patient %}
+    <form method="post" action="/clinician/save-vitals">
+      <input type="hidden" name="patient_id" value="{{ patient.id }}">
+
+      <div class="np-grid-2">
+        <div class="field">
+          <label>SYSTOLIC BP *</label>
+          <input type="number" name="systolic_bp" required>
+        </div>
+
+        <div class="field">
+          <label>DIASTOLIC BP *</label>
+          <input type="number" name="diastolic_bp" required>
+        </div>
+
+        <div class="field">
+          <label>FASTING GLUCOSE *</label>
+          <input type="number" step="0.1" name="fasting_glucose" required>
+        </div>
+
+        <div class="field">
+          <label>BMI *</label>
+          <input type="number" step="0.1" name="bmi" required>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="np-btn">NEXT →</button>
+      </div>
+    </form>
+    {% endif %}
+
+
+    <!-- ================= STEP C ================= -->
+    {% if step == 'c' and patient %}
+    <form method="post" action="/clinician/save-lifestyle">
+      <input type="hidden" name="patient_id" value="{{ patient.id }}">
+      <input type="hidden" name="visit_id" value="{{ request.query_params.get('visit_id') }}">
+
+      <div class="np-grid-2">
+        <div class="field">
+          <label>SMOKING *</label>
+          <select name="smoking" required>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>ALCOHOL *</label>
+          <select name="alcohol" required>
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button type="submit" class="np-btn">NEXT →</button>
+      </div>
+    </form>
+    {% endif %}
+
+
+    <!-- ================= STEP D ================= -->
+    {% if step == 'd' and patient %}
+    <form method="post" action="/clinician/save-medical">
+      <input type="hidden" name="patient_id" value="{{ patient.id }}">
+      <input type="hidden" name="visit_id" value="{{ request.query_params.get('visit_id') }}">
 
       <div class="np-grid-1">
         <div class="field">
@@ -92,7 +152,6 @@
           CALCULATE RISK & SAVE VISIT
         </button>
       </div>
-
     </form>
     {% endif %}
 
