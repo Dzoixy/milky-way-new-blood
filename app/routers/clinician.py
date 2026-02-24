@@ -24,7 +24,35 @@ def clinician_context(request: Request, active: str):
 
 
 # ==============================
-# NEW PATIENT FORM (GET)
+# DASHBOARD (เพิ่มกลับมา)
+# ==============================
+
+@router.get("/dashboard")
+async def clinician_dashboard(request: Request):
+
+    if request.session.get("role") != "clinician":
+        return RedirectResponse("/login", status_code=303)
+
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(
+            select(Patient).where(
+                Patient.organization_id ==
+                request.session.get("organization_id")
+            )
+        )
+        patients = result.scalars().all()
+
+    context = clinician_context(request, "dashboard")
+    context["patients"] = patients
+
+    return templates.TemplateResponse(
+        "dashboard_clinician.html",
+        context
+    )
+
+
+# ==============================
+# NEW PATIENT FORM
 # ==============================
 
 @router.get("/new-patient")
@@ -33,7 +61,6 @@ async def new_patient_form(request: Request):
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
-    # รับ step จาก query param
     step = request.query_params.get("step", "a")
 
     context = clinician_context(request, "new")
@@ -43,7 +70,7 @@ async def new_patient_form(request: Request):
 
 
 # ==============================
-# CREATE PATIENT (POST)
+# CREATE PATIENT
 # ==============================
 
 @router.post("/new-patient/create")
@@ -70,10 +97,8 @@ async def create_patient(
 
         db.add(new_patient)
         await db.commit()
-        await db.refresh(new_patient)
 
-    # ไป step D ต่อ
     return RedirectResponse(
-        f"/clinician/new-patient?step=d",
+        "/clinician/dashboard",
         status_code=303
     )
