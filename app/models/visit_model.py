@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, Float, String, Text, DateTime, ForeignKe
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from app.database.base import Base
+from app.database.connection import Base
 
 
 class Visit(Base):

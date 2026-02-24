@@ -1,5 +1,5 @@
 from datetime import date
-from sqlalchemy import String, Integer, Date, ForeignKey, Index
+from sqlalchemy import String, Integer, Date, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database.connection import Base
 
@@ -18,8 +18,6 @@ class Patient(Base):
         nullable=False
     )
 
-    # 🔥 สำคัญมากใน SaaS:
-    # national_id ห้าม unique global
     national_id: Mapped[str] = mapped_column(
         String(20),
         nullable=False
@@ -47,9 +45,16 @@ class Patient(Base):
         index=True
     )
 
-    # relationships
+    # ==========================
+    # Relationships
+    # ==========================
+
     user = relationship("User")
-    organization = relationship("Organization", back_populates="patients")
+
+    organization = relationship(
+        "Organization",
+        back_populates="patients"
+    )
 
     visits = relationship(
         "Visit",
@@ -57,13 +62,14 @@ class Patient(Base):
         cascade="all, delete-orphan"
     )
 
-    # 🔥 Composite index for SaaS isolation
+    # ==========================
+    # SaaS Unique Constraint
+    # ==========================
+
     __table_args__ = (
-        Index("idx_patient_org_nid", "organization_id", "national_id"),
-    )
-    
-    visits = relationship(
-    "Visit",
-    back_populates="patient",
-    cascade="all, delete"
+        UniqueConstraint(
+            "organization_id",
+            "national_id",
+            name="uq_patient_org_nid"
+        ),
     )
