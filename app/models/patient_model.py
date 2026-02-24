@@ -61,3 +61,9 @@ class Patient(Base):
     __table_args__ = (
         Index("idx_patient_org_nid", "organization_id", "national_id"),
     )
+    
+    visits = relationship(
+    "Visit",
+    back_populates="patient",
+    cascade="all, delete"
+    )

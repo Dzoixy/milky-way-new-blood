@@ -1,43 +1,65 @@
+from sqlalchemy import Column, Integer, Float, String, Text, DateTime, ForeignKey
+from sqlalchemy.orm import relationship
 from datetime import datetime
-from sqlalchemy import Integer, Float, ForeignKey, DateTime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
-from app.database.connection import Base
+
+from app.database.base import Base
 
 
 class Visit(Base):
     __tablename__ = "visits"
 
-    id: Mapped[int] = mapped_column(
-        Integer,
-        primary_key=True,
-        index=True
-    )
+    # ==========================
+    # Primary Key
+    # ==========================
+    id = Column(Integer, primary_key=True, index=True)
 
-    patient_id: Mapped[int] = mapped_column(
+    # ==========================
+    # Foreign Key
+    # ==========================
+    patient_id = Column(
+        Integer,
         ForeignKey("patients.id", ondelete="CASCADE"),
         nullable=False,
         index=True
     )
 
-    # Clinical measurements
-    sbp: Mapped[float] = mapped_column(Float, nullable=False)
-    dbp: Mapped[float] = mapped_column(Float, nullable=False)
+    # ==========================
+    # Vital Signs
+    # ==========================
+    systolic_bp = Column(Integer, nullable=True)
+    diastolic_bp = Column(Integer, nullable=True)
+    fasting_glucose = Column(Float, nullable=True)
+    bmi = Column(Float, nullable=True)
 
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True),
-        default=datetime.utcnow,
-        nullable=False
-    )
+    # ==========================
+    # Lifestyle
+    # ==========================
+    smoking = Column(String(50), nullable=True)
+    alcohol = Column(String(50), nullable=True)
 
-    # Relationships
+    # ==========================
+    # Medical History
+    # ==========================
+    chronic_diseases = Column(Text, nullable=True)
+    family_history = Column(Text, nullable=True)
+    allergies = Column(Text, nullable=True)
+    notes = Column(Text, nullable=True)
+
+    # ==========================
+    # Risk Engine
+    # ==========================
+    risk_score = Column(Float, nullable=True)
+    risk_level = Column(String(50), nullable=True)
+
+    # ==========================
+    # Metadata
+    # ==========================
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    # ==========================
+    # Relationship
+    # ==========================
     patient = relationship(
         "Patient",
         back_populates="visits"
-    )
-
-    risk_result = relationship(
-        "RiskResult",
-        back_populates="visit",
-        uselist=False,
-        cascade="all, delete-orphan"
     )
