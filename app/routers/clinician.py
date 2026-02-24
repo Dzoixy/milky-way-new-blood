@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Form, Depends
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import select
+from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import date
 
@@ -9,6 +9,7 @@ from app.database.connection import get_db
 from app.models.patient_model import Patient
 from app.models.visit_model import Visit
 from app.models.risk_result_model import RiskResult
+from app.services.risk_engine import calculate_risk
 
 router = APIRouter(prefix="/clinician")
 templates = Jinja2Templates(directory="app/templates")
@@ -27,7 +28,7 @@ def clinician_context(request: Request, active: str):
 
 
 # ==========================
-# Dashboard
+# Dashboard (Tenant Safe)
 # ==========================
 @router.get("/dashboard")
 async def clinician_dashboard(
@@ -37,15 +38,20 @@ async def clinician_dashboard(
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
-    result = await db.execute(select(Patient))
+    organization_id = request.session.get("organization_id")
+
+    result = await db.execute(
+        select(Patient).where(
+            Patient.organization_id == organization_id
+        )
+    )
     patients = result.scalars().all()
 
-    # ดึง risk ล่าสุดของแต่ละ patient
     for p in patients:
         visit_result = await db.execute(
             select(Visit)
             .where(Visit.patient_id == p.id)
-            .order_by(Visit.created_at.desc())
+            .order_by(desc(Visit.created_at))
         )
         last_visit = visit_result.scalar_one_or_none()
 
@@ -72,23 +78,16 @@ async def clinician_dashboard(
 # New Patient Form
 # ==========================
 @router.get("/new-patient")
-async def new_patient_form(
-    request: Request,
-    step: str = "a"  #  ต้องมี
-):
+async def new_patient_form(request: Request):
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
     context = clinician_context(request, "new")
-    context["step"] = step  #  ต้องใส่กลับมา
+    return templates.TemplateResponse("new_patient.html", context)
 
-    return templates.TemplateResponse(
-        "new_patient.html",
-        context
-    )
 
 # ==========================
-# Create Patient
+# Create Patient (Tenant Safe)
 # ==========================
 @router.post("/new-patient/create")
 async def create_patient(
@@ -102,13 +101,14 @@ async def create_patient(
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
+    organization_id = request.session.get("organization_id")
     user_id = request.session.get("user_id")
 
-    if not user_id:
-        return RedirectResponse("/login", status_code=303)
-
     result = await db.execute(
-        select(Patient).where(Patient.national_id == national_id)
+        select(Patient).where(
+            Patient.national_id == national_id,
+            Patient.organization_id == organization_id
+        )
     )
     existing = result.scalar_one_or_none()
 
@@ -120,7 +120,8 @@ async def create_patient(
             national_id=national_id,
             date_of_birth=date_of_birth,
             gender=gender,
-            user_id=user_id
+            user_id=user_id,
+            organization_id=organization_id
         )
         db.add(patient)
         await db.commit()
@@ -133,7 +134,7 @@ async def create_patient(
 
 
 # ==========================
-# Visit Form
+# Visit Form (Tenant Safe)
 # ==========================
 @router.get("/new-visit/{patient_id}")
 async def new_visit_form(
@@ -144,8 +145,13 @@ async def new_visit_form(
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
+    organization_id = request.session.get("organization_id")
+
     result = await db.execute(
-        select(Patient).where(Patient.id == patient_id)
+        select(Patient).where(
+            Patient.id == patient_id,
+            Patient.organization_id == organization_id
+        )
     )
     patient = result.scalar_one_or_none()
 
@@ -162,7 +168,7 @@ async def new_visit_form(
 
 
 # ==========================
-# Create Visit + Risk
+# Create Visit + Risk (Tenant Safe)
 # ==========================
 @router.post("/new-visit/{patient_id}")
 async def create_visit(
@@ -176,6 +182,20 @@ async def create_visit(
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
+    organization_id = request.session.get("organization_id")
+
+    # ตรวจสอบว่า patient อยู่ใน tenant นี้จริง
+    result = await db.execute(
+        select(Patient).where(
+            Patient.id == patient_id,
+            Patient.organization_id == organization_id
+        )
+    )
+    patient = result.scalar_one_or_none()
+
+    if not patient:
+        return RedirectResponse("/clinician/dashboard", status_code=303)
+
     visit = Visit(
         patient_id=patient_id,
         systolic_bp=sbp,
@@ -187,19 +207,7 @@ async def create_visit(
     await db.commit()
     await db.refresh(visit)
 
-    # Risk Logic
-    risk_score = 0
-    if sbp > 140:
-        risk_score += 1
-    if glucose > 126:
-        risk_score += 1
-
-    if risk_score == 0:
-        level = "LOW"
-    elif risk_score == 1:
-        level = "MODERATE"
-    else:
-        level = "HIGH"
+    level, risk_score = calculate_risk(sbp, glucose)
 
     risk = RiskResult(
         visit_id=visit.id,
@@ -209,7 +217,6 @@ async def create_visit(
 
     db.add(risk)
     await db.commit()
-    await db.refresh(risk)
 
     return RedirectResponse(
         f"/clinician/visit/{visit.id}/result",
@@ -218,7 +225,7 @@ async def create_visit(
 
 
 # ==========================
-# View Result
+# View Result (Tenant Safe)
 # ==========================
 @router.get("/visit/{visit_id}/result")
 async def view_visit_result(
@@ -229,8 +236,15 @@ async def view_visit_result(
     if request.session.get("role") != "clinician":
         return RedirectResponse("/login", status_code=303)
 
+    organization_id = request.session.get("organization_id")
+
     visit_result = await db.execute(
-        select(Visit).where(Visit.id == visit_id)
+        select(Visit)
+        .join(Patient)
+        .where(
+            Visit.id == visit_id,
+            Patient.organization_id == organization_id
+        )
     )
     visit = visit_result.scalar_one_or_none()
 

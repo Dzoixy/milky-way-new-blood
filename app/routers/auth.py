@@ -40,20 +40,19 @@ async def login(
         )
         user = result.scalar_one_or_none()
 
-    # ❌ ถ้าไม่มี user
     if not user:
         return RedirectResponse("/login", status_code=303)
 
-    # ❌ ถ้า password ไม่ถูก
     if not verify_password(password, user.password_hash):
         return RedirectResponse("/login", status_code=303)
 
-    # ✅ เก็บ session
+    # 🔥 Multi-Tenant Critical
     request.session["user_id"] = user.id
     request.session["role"] = user.role
     request.session["user_name"] = user.username
+    request.session["organization_id"] = user.organization_id   # ✅ สำคัญมาก
 
-    # ✅ redirect ตาม role จาก DB เท่านั้น
+    # Redirect by role
     if user.role == "clinician":
         return RedirectResponse("/clinician/dashboard", status_code=303)
 

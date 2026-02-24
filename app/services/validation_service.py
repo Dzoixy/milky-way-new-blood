@@ -1,21 +1,9 @@
-def validate_vital_signs(
-    sbp: float,
-    dbp: float,
-    hba1c: float,
-    ldl: float
-):
-    errors = []
+def validate_vitals(sbp: int, dbp: int, glucose: int):
+    if not (50 <= sbp <= 300):
+        raise ValueError("Invalid SBP")
 
-    if sbp < 50 or sbp > 300:
-        errors.append("Invalid SBP range")
+    if not (30 <= dbp <= 200):
+        raise ValueError("Invalid DBP")
 
-    if dbp < 30 or dbp > 200:
-        errors.append("Invalid DBP range")
-
-    if hba1c < 3 or hba1c > 20:
-        errors.append("Invalid HbA1c range")
-
-    if ldl < 0 or ldl > 500:
-        errors.append("Invalid LDL range")
-
-    return errors
+    if not (40 <= glucose <= 600):
+        raise ValueError("Invalid Glucose")
