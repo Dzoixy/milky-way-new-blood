@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from starlette.middleware.sessions import SessionMiddleware
 
-from app.routers import auth, clinician, patient, risk
+from app.routers import auth, clinician, patient
 from app.database.connection import engine, Base
 
 # =========================================
@@ -40,8 +40,6 @@ app.mount("/static", StaticFiles(directory="app/static"), name="static")
 app.include_router(auth.router)
 app.include_router(clinician.router)
 app.include_router(patient.router)
-app.include_router(risk.router)
-
 # =========================================
 # Database Startup
 # =========================================
