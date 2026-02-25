@@ -6,7 +6,7 @@ from datetime import datetime
 
 from app.database.connection import AsyncSessionLocal
 from app.models.patient_model import Patient
-from app.models.visit_model import Visit   # ต้องมี model นี้
+from app.models.visit_model import Visit
 
 router = APIRouter(prefix="/clinician")
 templates = Jinja2Templates(directory="app/templates")
@@ -25,6 +25,11 @@ def clinician_context(request: Request, active: str):
     }
 
 
+def require_clinician(request: Request):
+    if request.session.get("role") != "clinician":
+        raise HTTPException(status_code=403, detail="Unauthorized")
+
+
 # ======================================================
 # DASHBOARD
 # ======================================================
@@ -32,8 +37,7 @@ def clinician_context(request: Request, active: str):
 @router.get("/dashboard")
 async def clinician_dashboard(request: Request):
 
-    if request.session.get("role") != "clinician":
-        return RedirectResponse("/login", status_code=303)
+    require_clinician(request)
 
     org_id = request.session.get("organization_id")
 
@@ -46,10 +50,7 @@ async def clinician_dashboard(request: Request):
     context = clinician_context(request, "dashboard")
     context["patients"] = patients
 
-    return templates.TemplateResponse(
-        "dashboard_clinician.html",
-        context
-    )
+    return templates.TemplateResponse("dashboard_clinician.html", context)
 
 
 # ======================================================
@@ -59,8 +60,7 @@ async def clinician_dashboard(request: Request):
 @router.get("/new-patient")
 async def new_patient_form(request: Request):
 
-    if request.session.get("role") != "clinician":
-        return RedirectResponse("/login", status_code=303)
+    require_clinician(request)
 
     step = request.query_params.get("step", "a")
     patient_id = request.query_params.get("patient_id")
@@ -70,7 +70,10 @@ async def new_patient_form(request: Request):
     if patient_id:
         async with AsyncSessionLocal() as db:
             result = await db.execute(
-                select(Patient).where(Patient.id == int(patient_id))
+                select(Patient).where(
+                    Patient.id == int(patient_id),
+                    Patient.organization_id == request.session.get("organization_id")
+                )
             )
             patient = result.scalar_one_or_none()
 
@@ -94,19 +97,12 @@ async def create_patient(
     gender: str = Form(...)
 ):
 
-    if request.session.get("role") != "clinician":
-        return RedirectResponse("/login", status_code=303)
+    require_clinician(request)
 
     user_id = request.session.get("user_id")
     org_id = request.session.get("organization_id")
 
-    if not user_id or not org_id:
-        raise HTTPException(status_code=400, detail="Session invalid")
-
-    try:
-        dob = datetime.strptime(date_of_birth, "%Y-%m-%d").date()
-    except ValueError:
-        raise HTTPException(status_code=400, detail="Invalid date format")
+    dob = datetime.strptime(date_of_birth, "%Y-%m-%d").date()
 
     async with AsyncSessionLocal() as db:
 
@@ -143,10 +139,15 @@ async def save_vitals(
     bmi: float = Form(...)
 ):
 
+    require_clinician(request)
+
+    org_id = request.session.get("organization_id")
+
     async with AsyncSessionLocal() as db:
 
         visit = Visit(
             patient_id=patient_id,
+            organization_id=org_id,
             systolic_bp=systolic_bp,
             diastolic_bp=diastolic_bp,
             fasting_glucose=fasting_glucose,
@@ -176,10 +177,15 @@ async def save_lifestyle(
     alcohol: str = Form(...)
 ):
 
+    require_clinician(request)
+
     async with AsyncSessionLocal() as db:
 
         result = await db.execute(
-            select(Visit).where(Visit.id == visit_id)
+            select(Visit).where(
+                Visit.id == visit_id,
+                Visit.organization_id == request.session.get("organization_id")
+            )
         )
         visit = result.scalar_one()
 
@@ -195,7 +201,7 @@ async def save_lifestyle(
 
 
 # ======================================================
-# STEP D — SAVE MEDICAL HISTORY + FINISH
+# STEP D — SAVE MEDICAL + CALCULATE RISK + RESULT
 # ======================================================
 
 @router.post("/save-medical")
@@ -209,10 +215,15 @@ async def save_medical(
     notes: str = Form("")
 ):
 
+    require_clinician(request)
+
     async with AsyncSessionLocal() as db:
 
         result = await db.execute(
-            select(Visit).where(Visit.id == visit_id)
+            select(Visit).where(
+                Visit.id == visit_id,
+                Visit.organization_id == request.session.get("organization_id")
+            )
         )
         visit = result.scalar_one()
 
@@ -221,13 +232,59 @@ async def save_medical(
         visit.allergies = allergies
         visit.notes = notes
 
-        # ====== ตรงนี้ใส่ Risk Engine ได้ ======
-        # visit.risk_score = calculate_risk(...)
-        # visit.risk_level = "HIGH"
+        # ===== Risk Calculation =====
+        risk_score = 0
+
+        if visit.systolic_bp >= 140:
+            risk_score += 1
+        if visit.fasting_glucose >= 126:
+            risk_score += 1
+        if visit.bmi >= 30:
+            risk_score += 1
+
+        if risk_score == 0:
+            risk_level = "LOW"
+        elif risk_score == 1:
+            risk_level = "MODERATE"
+        else:
+            risk_level = "HIGH"
+
+        visit.risk_score = risk_score
+        visit.risk_level = risk_level
 
         await db.commit()
 
     return RedirectResponse(
-        "/clinician/dashboard",
+        f"/clinician/result/{visit_id}",
         status_code=303
+    )
+
+
+# ======================================================
+# RESULT PAGE
+# ======================================================
+
+@router.get("/result/{visit_id}")
+async def view_result(request: Request, visit_id: int):
+
+    require_clinician(request)
+
+    async with AsyncSessionLocal() as db:
+        result = await db.execute(
+            select(Visit).where(
+                Visit.id == visit_id,
+                Visit.organization_id == request.session.get("organization_id")
+            )
+        )
+        visit = result.scalar_one_or_none()
+
+    if not visit:
+        return RedirectResponse("/clinician/dashboard", status_code=303)
+
+    context = clinician_context(request, "dashboard")
+    context["visit"] = visit
+
+    return templates.TemplateResponse(
+        "result_view_clinician.html",
+        context
     )
