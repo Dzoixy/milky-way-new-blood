@@ -29,6 +29,9 @@ def require_clinician(request: Request):
     if request.session.get("role") != "clinician":
         raise HTTPException(status_code=403, detail="Unauthorized")
 
+    if not request.session.get("organization_id"):
+        raise HTTPException(status_code=400, detail="Invalid session")
+
 
 # ======================================================
 # DASHBOARD
@@ -38,7 +41,6 @@ def require_clinician(request: Request):
 async def clinician_dashboard(request: Request):
 
     require_clinician(request)
-
     org_id = request.session.get("organization_id")
 
     async with AsyncSessionLocal() as db:
@@ -54,7 +56,7 @@ async def clinician_dashboard(request: Request):
 
 
 # ======================================================
-# NEW PATIENT (MULTI STEP)
+# NEW PATIENT
 # ======================================================
 
 @router.get("/new-patient")
@@ -85,7 +87,7 @@ async def new_patient_form(request: Request):
 
 
 # ======================================================
-# STEP A — CREATE PATIENT
+# STEP A
 # ======================================================
 
 @router.post("/new-patient/create")
@@ -105,7 +107,6 @@ async def create_patient(
     dob = datetime.strptime(date_of_birth, "%Y-%m-%d").date()
 
     async with AsyncSessionLocal() as db:
-
         new_patient = Patient(
             full_name=full_name.strip(),
             national_id=national_id.strip(),
@@ -126,7 +127,7 @@ async def create_patient(
 
 
 # ======================================================
-# STEP B — SAVE VITAL SIGNS
+# STEP B
 # ======================================================
 
 @router.post("/save-vitals")
@@ -140,10 +141,21 @@ async def save_vitals(
 ):
 
     require_clinician(request)
-
     org_id = request.session.get("organization_id")
 
     async with AsyncSessionLocal() as db:
+
+        # เช็ค patient ว่าอยู่ใน org นี้จริง
+        result = await db.execute(
+            select(Patient).where(
+                Patient.id == patient_id,
+                Patient.organization_id == org_id
+            )
+        )
+        patient = result.scalar_one_or_none()
+
+        if not patient:
+            raise HTTPException(status_code=404, detail="Patient not found")
 
         visit = Visit(
             patient_id=patient_id,
@@ -165,7 +177,7 @@ async def save_vitals(
 
 
 # ======================================================
-# STEP C — SAVE LIFESTYLE
+# STEP C
 # ======================================================
 
 @router.post("/save-lifestyle")
@@ -178,16 +190,20 @@ async def save_lifestyle(
 ):
 
     require_clinician(request)
+    org_id = request.session.get("organization_id")
 
     async with AsyncSessionLocal() as db:
 
         result = await db.execute(
             select(Visit).where(
                 Visit.id == visit_id,
-                Visit.organization_id == request.session.get("organization_id")
+                Visit.organization_id == org_id
             )
         )
-        visit = result.scalar_one()
+        visit = result.scalar_one_or_none()
+
+        if not visit:
+            raise HTTPException(status_code=404, detail="Visit not found")
 
         visit.smoking = smoking
         visit.alcohol = alcohol
@@ -201,7 +217,7 @@ async def save_lifestyle(
 
 
 # ======================================================
-# STEP D — SAVE MEDICAL + CALCULATE RISK + RESULT
+# STEP D
 # ======================================================
 
 @router.post("/save-medical")
@@ -216,41 +232,44 @@ async def save_medical(
 ):
 
     require_clinician(request)
+    org_id = request.session.get("organization_id")
 
     async with AsyncSessionLocal() as db:
 
         result = await db.execute(
             select(Visit).where(
                 Visit.id == visit_id,
-                Visit.organization_id == request.session.get("organization_id")
+                Visit.organization_id == org_id
             )
         )
-        visit = result.scalar_one()
+        visit = result.scalar_one_or_none()
+
+        if not visit:
+            raise HTTPException(status_code=404, detail="Visit not found")
 
         visit.chronic_diseases = chronic
         visit.family_history = family
         visit.allergies = allergies
         visit.notes = notes
 
-        # ===== Risk Calculation =====
+        # Risk logic
         risk_score = 0
 
-        if visit.systolic_bp >= 140:
+        if visit.systolic_bp and visit.systolic_bp >= 140:
             risk_score += 1
-        if visit.fasting_glucose >= 126:
+        if visit.fasting_glucose and visit.fasting_glucose >= 126:
             risk_score += 1
-        if visit.bmi >= 30:
+        if visit.bmi and visit.bmi >= 30:
             risk_score += 1
 
         if risk_score == 0:
-            risk_level = "LOW"
+            visit.risk_level = "LOW"
         elif risk_score == 1:
-            risk_level = "MODERATE"
+            visit.risk_level = "MODERATE"
         else:
-            risk_level = "HIGH"
+            visit.risk_level = "HIGH"
 
         visit.risk_score = risk_score
-        visit.risk_level = risk_level
 
         await db.commit()
 
@@ -261,19 +280,20 @@ async def save_medical(
 
 
 # ======================================================
-# RESULT PAGE
+# RESULT
 # ======================================================
 
 @router.get("/result/{visit_id}")
 async def view_result(request: Request, visit_id: int):
 
     require_clinician(request)
+    org_id = request.session.get("organization_id")
 
     async with AsyncSessionLocal() as db:
         result = await db.execute(
             select(Visit).where(
                 Visit.id == visit_id,
-                Visit.organization_id == request.session.get("organization_id")
+                Visit.organization_id == org_id
             )
         )
         visit = result.scalar_one_or_none()

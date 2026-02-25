@@ -14,7 +14,7 @@ class Visit(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     # ==========================
-    # Foreign Key
+    # Foreign Keys
     # ==========================
     patient_id = Column(
         Integer,
@@ -23,13 +23,20 @@ class Visit(Base):
         index=True
     )
 
+    organization_id = Column(
+        Integer,
+        ForeignKey("organizations.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True
+    )
+
     # ==========================
     # Vital Signs
     # ==========================
-    systolic_bp = Column(Integer, nullable=True)
-    diastolic_bp = Column(Integer, nullable=True)
-    fasting_glucose = Column(Float, nullable=True)
-    bmi = Column(Float, nullable=True)
+    systolic_bp = Column(Integer, nullable=False)
+    diastolic_bp = Column(Integer, nullable=False)
+    fasting_glucose = Column(Float, nullable=False)
+    bmi = Column(Float, nullable=False)
 
     # ==========================
     # Lifestyle
@@ -54,12 +61,16 @@ class Visit(Base):
     # ==========================
     # Metadata
     # ==========================
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     # ==========================
-    # Relationship
+    # Relationships
     # ==========================
     patient = relationship(
         "Patient",
         back_populates="visits"
+    )
+
+    organization = relationship(
+        "Organization"
     )
