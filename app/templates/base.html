@@ -33,21 +33,21 @@
 
         {% if role == "clinician" %}
             <a href="/clinician/dashboard"
-               class="{% if active=='dashboard' %}active{% endif %}">
+               class="{% if active_tab=='dashboard' %}active{% endif %}">
                DASHBOARD
             </a>
             <a href="/clinician/new-patient"
-               class="{% if active=='new' %}active{% endif %}">
+               class="{% if active_tab=='new' %}active{% endif %}">
                NEW PATIENT
             </a>
 
         {% elif role == "patient" %}
             <a href="/patient/health"
-               class="{% if active=='health' %}active{% endif %}">
+               class="{% if active_tab=='health' %}active{% endif %}">
                MY HEALTH
             </a>
             <a href="/patient/results"
-               class="{% if active=='results' %}active{% endif %}">
+               class="{% if active_tab=='results' %}active{% endif %}">
                MY RESULTS
             </a>
         {% endif %}
