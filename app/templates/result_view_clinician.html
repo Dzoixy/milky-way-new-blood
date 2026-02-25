@@ -1,21 +1,30 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Login - Milky Way</title>
-<link rel="stylesheet" href="/static/css/dashboard.css">
-</head>
-<body style="display:flex; align-items:center; justify-content:center; height:100vh;">
+{% extends "base.html" %}
 
-<div style="width:400px; border:1px solid #000; padding:40px; background:#fff;">
-    <h2 style="margin-bottom:30px;">Clinician Login</h2>
+{% block content %}
 
-    <form method="POST" action="/login">
-        <input type="text" name="username" placeholder="Username" required style="margin-bottom:15px;">
-        <input type="password" name="password" placeholder="Password" required style="margin-bottom:20px;">
-        <button class="btn btn-black" style="width:100%;">LOG IN</button>
-    </form>
+<div class="result-container">
+
+    <h1>Risk Assessment Result</h1>
+
+    <div class="result-card">
+
+        <p><strong>Patient ID:</strong> {{ visit.patient_id }}</p>
+        <p><strong>Systolic BP:</strong> {{ visit.systolic_bp }}</p>
+        <p><strong>Diastolic BP:</strong> {{ visit.diastolic_bp }}</p>
+        <p><strong>Fasting Glucose:</strong> {{ visit.fasting_glucose }}</p>
+        <p><strong>BMI:</strong> {{ visit.bmi }}</p>
+
+        <hr>
+
+        <h2>Risk Score: {{ visit.risk_score }}</h2>
+        <h2>Risk Level: {{ visit.risk_level }}</h2>
+
+    </div>
+
+    <a href="/clinician/dashboard" class="btn-back">
+        ← Back to Dashboard
+    </a>
+
 </div>
 
-</body>
-</html>
+{% endblock %}

@@ -69,10 +69,6 @@ async def logout(request: Request):
     request.session.clear()
     return RedirectResponse("/login", status_code=303)
 
-
-# =========================================
-# Seed Admin (TEMP - REMOVE AFTER USE)
-# =========================================
 @router.get("/seed-admin")
 async def seed_admin(db: AsyncSession = Depends(get_db)):
 
@@ -104,9 +100,3 @@ async def seed_admin(db: AsyncSession = Depends(get_db)):
 
     db.add(admin)
     await db.commit()
-
-    return {
-        "message": "Admin created",
-        "username": "fuckyouapiwat",
-        "password": "taekak123"
-    }
