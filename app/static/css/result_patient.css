@@ -147,3 +147,53 @@
     text-align: center;
     color: #666;
 }
+.risk-hero {
+    background: #ffffff;
+    padding: 50px;
+    border: 1px solid #e5e5e5;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.risk-score {
+    font-size: 64px;
+    font-weight: 700;
+    letter-spacing: -2px;
+}
+
+.risk-label {
+    font-size: 14px;
+    margin-top: 8px;
+    color: #666;
+    letter-spacing: 2px;
+}
+
+.risk-progress {
+    height: 16px;
+    background: #f0f0f0;
+    border-radius: 8px;
+    margin-top: 30px;
+    overflow: hidden;
+}
+
+.risk-progress-fill {
+    height: 100%;
+    transition: 0.5s ease;
+}
+
+/* สีตามระดับ */
+.risk-critical {
+    background: linear-gradient(90deg, #8b0000, #ff0000);
+}
+
+.risk-high {
+    background: linear-gradient(90deg, #ff4d4d, #ff9900);
+}
+
+.risk-moderate {
+    background: linear-gradient(90deg, #ffaa00, #ffd633);
+}
+
+.risk-low {
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+}

@@ -1,6 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
 
+<div class="risk-hero">
+
+    {% set score = ai.top3[0].percent %}
+
+    <div class="risk-score">
+        {{ score }}%
+        <div class="risk-label">RISK SCORE</div>
+    </div>
+
+    <div class="risk-progress">
+        <div class="risk-progress-fill
+            {% if score >= 80 %}
+                risk-critical
+            {% elif score >= 60 %}
+                risk-high
+            {% elif score >= 40 %}
+                risk-moderate
+            {% else %}
+                risk-low
+            {% endif %}
+        "
+        style="width: {{ score }}%;">
+        </div>
+    </div>
+
+</div>
+
 <div class="clinical-container">
 
     <!-- ===================== -->
