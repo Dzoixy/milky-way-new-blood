@@ -1,15 +1,10 @@
-clinical-result {
+.clinical-container {
     max-width: 1100px;
     margin: 40px auto;
 }
 
-.result-header {
-    margin-bottom: 30px;
-}
-
-.score-card {
+.risk-card {
     display: flex;
-    align-items: center;
     gap: 40px;
     background: #fff;
     padding: 30px;
@@ -17,87 +12,89 @@ clinical-result {
     margin-bottom: 40px;
 }
 
-.score-percent {
-    font-size: 48px;
+.risk-percent {
+    font-size: 56px;
     font-weight: bold;
 }
 
-.score-label {
-    font-size: 18px;
+.risk-info {
+    flex: 1;
+}
+
+.risk-level {
+    font-size: 22px;
     font-weight: 600;
+    margin-bottom: 10px;
 }
 
-.score-bar {
+.risk-level.high { color: #c0392b; }
+.risk-level.moderate { color: #f39c12; }
+.risk-level.low { color: #27ae60; }
+
+.risk-bar {
     width: 100%;
-    height: 25px;
+    height: 20px;
     background: #eee;
-    position: relative;
 }
 
-.score-bar-fill {
+.risk-fill {
     height: 100%;
 }
 
-.score-bar-fill.high {
-    background: #c0392b;
+.risk-fill.high { background: #c0392b; }
+.risk-fill.moderate { background: #f39c12; }
+.risk-fill.low { background: #27ae60; }
+
+.section-card {
+    background: #fff;
+    padding: 25px;
+    border: 1px solid #ddd;
+    margin-bottom: 30px;
 }
 
-.score-bar-fill.moderate {
-    background: #f39c12;
+.section-title {
+    font-weight: 600;
+    margin-bottom: 20px;
 }
 
-.score-bar-fill.low {
-    background: #27ae60;
-}
-
-.section {
-    margin-bottom: 40px;
-}
-
-.risk-table {
+.clinical-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.risk-table th {
+.clinical-table th {
     background: #000;
     color: #fff;
     padding: 10px;
-    text-align: left;
 }
 
-.risk-table td {
+.clinical-table td {
     border: 1px solid #ddd;
     padding: 10px;
 }
 
-.recommendation .alert {
+.recommend-box {
     padding: 20px;
     font-weight: 600;
 }
 
-.alert.high {
+.recommend-box.high {
     background: #fdecea;
     color: #c0392b;
 }
 
-.alert.moderate {
+.recommend-box.moderate {
     background: #fff4e5;
     color: #f39c12;
 }
 
-.alert.low {
+.recommend-box.low {
     background: #eafaf1;
     color: #27ae60;
 }
 
-.result-footer {
-    text-align: right;
-}
-
-.btn-primary {
-    background: #000;
-    color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
+.disclaimer {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 30px;
 }

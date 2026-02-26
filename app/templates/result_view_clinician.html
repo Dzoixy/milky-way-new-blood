@@ -1,42 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="clinical-result">
+<div class="clinical-container">
 
-    <!-- HEADER -->
-    <div class="result-header">
-        <h1>Clinical Risk Assessment</h1>
-        <div class="patient-meta">
-            Visit Date:
-            {{ visit.created_at.strftime("%Y-%m-%d") if visit.created_at else "-" }}
+    <!-- ===================== -->
+    <!-- RISK SCORE SECTION -->
+    <!-- ===================== -->
+    <div class="risk-card">
+
+        <div class="risk-percent">
+            {{ (visit.risk_score * 33) | round(1) }}%
         </div>
-    </div>
 
-
-    <!-- SCORE SECTION -->
-    <div class="score-card">
-
-        <div class="score-left">
-            <div class="score-percent">
-                {{ (visit.risk_score * 33) | round(0) }}%
-            </div>
-            <div class="score-label">
+        <div class="risk-info">
+            <div class="risk-level {{ visit.risk_level|lower }}">
                 {{ visit.risk_level }}
             </div>
-        </div>
 
-        <div class="score-bar-wrapper">
-            <div class="score-bar">
-                <div class="score-bar-fill
-                    {% if visit.risk_level == 'HIGH' %}
-                        high
-                    {% elif visit.risk_level == 'MODERATE' %}
-                        moderate
-                    {% else %}
-                        low
-                    {% endif %}
-                "
-                style="width: {{ (visit.risk_score * 33) | round(0) }}%;">
+            <div class="risk-bar">
+                <div class="risk-fill {{ visit.risk_level|lower }}"
+                     style="width: {{ (visit.risk_score * 33) }}%;">
                 </div>
             </div>
         </div>
@@ -44,15 +27,17 @@
     </div>
 
 
-    <!-- RISK FACTORS TABLE -->
-    <div class="section">
-        <h2>Risk Factors Overview</h2>
+    <!-- ===================== -->
+    <!-- RISK FACTOR TABLE -->
+    <!-- ===================== -->
+    <div class="section-card">
+        <div class="section-title">RISK FACTOR ANALYSIS</div>
 
-        <table class="risk-table">
+        <table class="clinical-table">
             <tr>
-                <th>Factor</th>
-                <th>Value</th>
-                <th>Risk Trigger</th>
+                <th>FACTOR</th>
+                <th>VALUE</th>
+                <th>STATUS</th>
             </tr>
 
             <tr>
@@ -60,9 +45,9 @@
                 <td>{{ visit.systolic_bp }}</td>
                 <td>
                     {% if visit.systolic_bp and visit.systolic_bp >= 140 %}
-                        ✓ High
+                        HIGH
                     {% else %}
-                        Normal
+                        NORMAL
                     {% endif %}
                 </td>
             </tr>
@@ -72,9 +57,9 @@
                 <td>{{ visit.fasting_glucose }}</td>
                 <td>
                     {% if visit.fasting_glucose and visit.fasting_glucose >= 126 %}
-                        ✓ High
+                        HIGH
                     {% else %}
-                        Normal
+                        NORMAL
                     {% endif %}
                 </td>
             </tr>
@@ -84,46 +69,39 @@
                 <td>{{ visit.bmi }}</td>
                 <td>
                     {% if visit.bmi and visit.bmi >= 30 %}
-                        ✓ Obese
+                        OBESE
                     {% else %}
-                        Normal
+                        NORMAL
                     {% endif %}
                 </td>
             </tr>
-
         </table>
     </div>
 
 
-    <!-- CLINICAL RECOMMENDATION -->
-    <div class="section recommendation">
+    <!-- ===================== -->
+    <!-- RECOMMENDATION -->
+    <!-- ===================== -->
+    <div class="section-card">
+        <div class="section-title">CLINICAL RECOMMENDATION</div>
 
-        <h2>Clinical Recommendation</h2>
-
-        {% if visit.risk_level == "HIGH" %}
-            <div class="alert high">
-                Immediate lifestyle intervention and clinical evaluation recommended.
-            </div>
-
-        {% elif visit.risk_level == "MODERATE" %}
-            <div class="alert moderate">
-                Monitor closely. Recommend dietary control and follow-up within 3 months.
-            </div>
-
-        {% else %}
-            <div class="alert low">
-                Maintain healthy lifestyle. Annual follow-up sufficient.
-            </div>
-        {% endif %}
-
+        <div class="recommend-box {{ visit.risk_level|lower }}">
+            {% if visit.risk_level == "HIGH" %}
+                Immediate intervention required. Recommend specialist referral.
+            {% elif visit.risk_level == "MODERATE" %}
+                Lifestyle modification recommended. Re-evaluate in 3 months.
+            {% else %}
+                Maintain current health status. Annual follow-up sufficient.
+            {% endif %}
+        </div>
     </div>
 
 
-    <!-- FOOTER -->
-    <div class="result-footer">
-        <a href="/clinician/dashboard" class="btn-primary">
-            Back to Dashboard
-        </a>
+    <!-- ===================== -->
+    <!-- DISCLAIMER -->
+    <!-- ===================== -->
+    <div class="disclaimer">
+        Clinical Decision Support Only. Not a substitute for medical judgement.
     </div>
 
 </div>
