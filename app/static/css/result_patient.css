@@ -98,65 +98,102 @@
     opacity: 0.7;
     margin-top: 30px;
 }
+.section-header {
+    background: #000;
+    color: #fff;
+    padding: 12px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.section-header.center {
+    text-align: center;
+}
+
+.no-bullet-list {
+    padding: 20px;
+}
+
+.life-item {
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.projection-box {
+    padding: 20px;
+    font-size: 15px;
+}
+
+.section-card {
+    margin-bottom: 40px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+}
+
+.clinical-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clinical-table th,
+.clinical-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.disclaimer {
+    margin-top: 40px;
+    font-size: 12px;
+    text-align: center;
+    color: #666;
+}
 .risk-hero {
-    display: flex;
-    align-items: center;
     background: #ffffff;
     padding: 50px;
     border: 1px solid #e5e5e5;
     margin-bottom: 40px;
-}
-
-.risk-left {
-    width: 30%;
     text-align: center;
 }
 
-.risk-percent {
-    font-size: 72px;
+.risk-score {
+    font-size: 64px;
     font-weight: 700;
     letter-spacing: -2px;
 }
 
-.risk-right {
-    width: 70%;
-}
-
-.risk-level-text {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 20px;
+.risk-label {
+    font-size: 14px;
+    margin-top: 8px;
+    color: #666;
+    letter-spacing: 2px;
 }
 
 .risk-progress {
-    height: 18px;
+    height: 16px;
     background: #f0f0f0;
-    border-radius: 9px;
+    border-radius: 8px;
+    margin-top: 30px;
     overflow: hidden;
 }
 
 .risk-progress-fill {
     height: 100%;
-    transition: 0.4s ease;
+    transition: 0.5s ease;
 }
 
-/* Color mapping */
+/* สีตามระดับ */
 .risk-critical {
-    color: #8b0000;
     background: linear-gradient(90deg, #8b0000, #ff0000);
 }
 
 .risk-high {
-    color: #c0392b;
     background: linear-gradient(90deg, #ff4d4d, #ff9900);
 }
 
 .risk-moderate {
-    color: #d68910;
     background: linear-gradient(90deg, #ffaa00, #ffd633);
 }
 
 .risk-low {
-    color: #27ae60;
     background: linear-gradient(90deg, #2ecc71, #27ae60);
 }
