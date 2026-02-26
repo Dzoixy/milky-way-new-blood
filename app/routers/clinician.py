@@ -7,6 +7,7 @@ from datetime import datetime
 from app.database.connection import AsyncSessionLocal
 from app.models.patient_model import Patient
 from app.models.visit_model import Visit
+from app.utils.ai_risk_engine import analyze_risk
 
 router = APIRouter(prefix="/clinician")
 templates = Jinja2Templates(directory="app/templates")
@@ -327,8 +328,11 @@ async def view_result(request: Request, visit_id: int):
     if not visit:
         return RedirectResponse("/clinician/dashboard", status_code=303)
 
-    context = clinician_context(request, "results")  # สำคัญมาก
+    ai_data = analyze_risk(visit)
+
+    context = clinician_context(request, "results")
     context["visit"] = visit
+    context["ai"] = ai_data   # <-- ต้องมีบรรทัดนี้
 
     return templates.TemplateResponse(
         "result_view_clinician.html",
