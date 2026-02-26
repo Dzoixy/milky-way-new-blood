@@ -4,38 +4,13 @@
 <div class="clinical-container">
 
     <!-- ===================== -->
-    <!-- AI TOP RISK SECTION -->
-    <!-- ===================== -->
-    <div class="risk-card">
-
-        <div class="risk-percent">
-            {{ ai.top3[0].percent }}%
-        </div>
-
-        <div class="risk-info">
-            <div class="risk-level">
-                {{ ai.top3[0].name }}
-            </div>
-
-            <div class="risk-bar">
-                <div class="risk-fill"
-                     style="width: {{ ai.top3[0].percent }}%;">
-                </div>
-            </div>
-
-            <div style="margin-top:10px; font-size:14px;">
-                สาเหตุหลัก: {{ ai.top3[0].main_cause }}
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- ===================== -->
-    <!-- TOP 3 DISEASES -->
+    <!-- TOP 3 RISK -->
     <!-- ===================== -->
     <div class="section-card">
-        <div class="section-title">TOP 3 RISK DISEASES</div>
+
+        <div class="section-header">
+            TOP 3 RISK DISEASES
+        </div>
 
         <table class="clinical-table">
             <tr>
@@ -52,51 +27,121 @@
             </tr>
             {% endfor %}
         </table>
+
     </div>
 
 
     <!-- ===================== -->
-    <!-- LIFESTYLE PLAN -->
+    <!-- VITAL STATUS -->
     <!-- ===================== -->
     <div class="section-card">
-        <div class="section-title">AI LIFESTYLE RECOMMENDATION</div>
 
-        <ul style="line-height:1.8;">
+        <div class="section-header">
+            VITAL STATUS ANALYSIS
+        </div>
+
+        <table class="clinical-table">
+            <tr>
+                <th>FACTOR</th>
+                <th>VALUE</th>
+                <th>STATUS</th>
+            </tr>
+
+            <tr>
+                <td>Systolic BP</td>
+                <td>{{ visit.systolic_bp }}</td>
+                <td>
+                    {% if visit.systolic_bp > 140 %}
+                        มากเกิน
+                    {% elif visit.systolic_bp < 100 %}
+                        น้อยเกิน
+                    {% else %}
+                        พอดี
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Fasting Glucose</td>
+                <td>{{ visit.fasting_glucose }}</td>
+                <td>
+                    {% if visit.fasting_glucose > 126 %}
+                        มากเกิน
+                    {% elif visit.fasting_glucose < 70 %}
+                        น้อยเกิน
+                    {% else %}
+                        พอดี
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <td>BMI</td>
+                <td>{{ visit.bmi }}</td>
+                <td>
+                    {% if visit.bmi > 30 %}
+                        มากเกิน
+                    {% elif visit.bmi < 18.5 %}
+                        น้อยเกิน
+                    {% else %}
+                        พอดี
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+
+    <!-- ===================== -->
+    <!-- LIFESTYLE -->
+    <!-- ===================== -->
+    <div class="section-card">
+
+        <div class="section-header center">
+            LIFESTYLE RECOMMENDED
+        </div>
+
+        <div class="no-bullet-list">
             {% for item in ai.lifestyle %}
-            <li>{{ item }}</li>
+                <div class="life-item">{{ item }}</div>
             {% endfor %}
-        </ul>
+        </div>
+
     </div>
 
 
     <!-- ===================== -->
-    <!-- CONFIDENCE + SIMULATION -->
+    <!-- RISK PROJECTION -->
     <!-- ===================== -->
     <div class="section-card">
-        <div class="section-title">RISK PROJECTION</div>
 
-        <div style="margin-bottom:10px;">
-            10-Year Risk (Current): {{ ai.simulation.current }}%
+        <div class="section-header center">
+            RISK PROJECTION
         </div>
 
-        <div style="margin-bottom:10px;">
-            10-Year Risk (After Lifestyle Adjustment): 
-            {{ ai.simulation.after_lifestyle }}%
+        <div class="projection-box">
+            <div>
+                Current 10-Year Risk:
+                <strong>{{ ai.simulation.current }}%</strong>
+            </div>
+
+            <div>
+                After Lifestyle Adjustment:
+                <strong>{{ ai.simulation.after_lifestyle }}%</strong>
+            </div>
+
+            <div>
+                Confidence:
+                <strong>{{ (ai.confidence * 100) | round(1) }}%</strong>
+            </div>
         </div>
 
-        <div>
-            Model Confidence: {{ (ai.confidence * 100) | round(1) }}%
-        </div>
     </div>
 
 
-    <!-- ===================== -->
-    <!-- DISCLAIMER -->
-    <!-- ===================== -->
     <div class="disclaimer">
-        Clinical Decision Support Only. 
-        AI-generated assessment based on statistical risk modeling. 
-        Not a substitute for physician judgement.
+        Clinical Decision Support Only. AI-based modeling for assistance purposes.
     </div>
 
 </div>

@@ -98,3 +98,52 @@
     opacity: 0.7;
     margin-top: 30px;
 }
+.section-header {
+    background: #000;
+    color: #fff;
+    padding: 12px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.section-header.center {
+    text-align: center;
+}
+
+.no-bullet-list {
+    padding: 20px;
+}
+
+.life-item {
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.projection-box {
+    padding: 20px;
+    font-size: 15px;
+}
+
+.section-card {
+    margin-bottom: 40px;
+    border: 1px solid #e0e0e0;
+    background: #fff;
+}
+
+.clinical-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.clinical-table th,
+.clinical-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.disclaimer {
+    margin-top: 40px;
+    font-size: 12px;
+    text-align: center;
+    color: #666;
+}
