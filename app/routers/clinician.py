@@ -45,13 +45,38 @@ async def clinician_dashboard(request: Request):
     org_id = request.session.get("organization_id")
 
     async with AsyncSessionLocal() as db:
+
         result = await db.execute(
             select(Patient).where(Patient.organization_id == org_id)
         )
         patients = result.scalars().all()
 
+        high_count = 0
+        low_count = 0
+
+        for patient in patients:
+
+            visit_result = await db.execute(
+                select(Visit)
+                .where(Visit.patient_id == patient.id)
+                .order_by(Visit.created_at.desc())
+            )
+            last_visit = visit_result.scalars().first()
+
+            # attach visit เข้า patient
+            patient.last_visit = last_visit
+
+            if last_visit and last_visit.risk_level:
+                if last_visit.risk_level == "HIGH":
+                    high_count += 1
+                else:
+                    low_count += 1
+
     context = clinician_context(request, "dashboard")
     context["patients"] = patients
+    context["total_patients"] = len(patients)
+    context["high_count"] = high_count
+    context["low_count"] = low_count
 
     return templates.TemplateResponse("dashboard_clinician.html", context)
 

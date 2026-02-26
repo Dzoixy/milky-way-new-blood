@@ -4,7 +4,6 @@
 <div class="dash-header">
     <div>
         <div class="page-title">Dashboard</div>
-        <div class="page-sub">{{ current_date }}</div>
     </div>
 
     <a href="/clinician/new-patient" class="btn-primary">
@@ -16,27 +15,12 @@
 
 
 <!-- ===================== -->
-<!-- PATIENT SEARCH -->
-<!-- ===================== -->
-<div class="panel">
-    <div class="panel-head">PATIENT SEARCH</div>
-    <div class="panel-body">
-        <div class="search-row">
-            <input type="text" placeholder="Search by name or National ID...">
-            <button class="btn-primary small">SEARCH</button>
-            <button class="btn-outline small">CLEAR</button>
-        </div>
-    </div>
-</div>
-
-
-<!-- ===================== -->
 <!-- PATIENT LIST -->
 <!-- ===================== -->
 <div class="panel">
     <div class="panel-head flex-between">
         <span>PATIENT LIST</span>
-        <span class="record-count">{{ patients|length }} RECORDS</span>
+        <span class="record-count">{{ total_patients }} RECORDS</span>
     </div>
 
     <div class="panel-body">
@@ -55,19 +39,40 @@
                 <tr>
                     <td>{{ p.full_name }}</td>
                     <td>{{ p.national_id }}</td>
-                    <td>{{ p.last_visit or '-' }}</td>
+
+                    <!-- LAST VISIT -->
                     <td>
-                        <span class="risk-badge {{ p.risk_level|lower }}">
-                            {{ p.risk_level or 'N/A' }}
-                        </span>
+                        {% if p.last_visit %}
+                            {{ p.last_visit.created_at.strftime("%Y-%m-%d") }}
+                        {% else %}
+                            -
+                        {% endif %}
                     </td>
+
+                    <!-- RISK LEVEL -->
+                    <td>
+                        {% if p.last_visit %}
+                            <span class="risk-badge {{ p.last_visit.risk_level|lower }}">
+                                {{ p.last_visit.risk_level }}
+                            </span>
+                        {% else %}
+                            <span class="risk-badge na">N/A</span>
+                        {% endif %}
+                    </td>
+
+                    <!-- ACTIONS -->
                     <td class="table-actions">
-                        <a href="/clinician/patient/{{ p.id }}" class="action-btn">
-                            VIEW
-                        </a>
-                        <a href="/clinician/patient/{{ p.id }}/new-visit" class="action-btn">
+
+                        {% if p.last_visit %}
+                            <a href="/clinician/result/{{ p.last_visit.id }}" class="action-btn">
+                                VIEW
+                            </a>
+                        {% endif %}
+
+                        <a href="/clinician/new-patient?step=b&patient_id={{ p.id }}" class="action-btn">
                             NEW VISIT
                         </a>
+
                     </td>
                 </tr>
             {% else %}
@@ -92,21 +97,17 @@
         <div class="summary-grid">
 
             <div class="summary-box">
-                <div class="summary-num">{{ patients|length }}</div>
+                <div class="summary-num">{{ total_patients }}</div>
                 <div class="summary-label">TOTAL PATIENTS</div>
             </div>
 
             <div class="summary-box">
-                <div class="summary-num">
-                    {{ patients | selectattr("risk_level","in",["HIGH","VERY HIGH"]) | list | length }}
-                </div>
-                <div class="summary-label">HIGH / VERY HIGH RISK</div>
+                <div class="summary-num">{{ high_count }}</div>
+                <div class="summary-label">HIGH RISK</div>
             </div>
 
             <div class="summary-box">
-                <div class="summary-num">
-                    {{ patients | selectattr("risk_level","in",["LOW","MODERATE"]) | list | length }}
-                </div>
+                <div class="summary-num">{{ low_count }}</div>
                 <div class="summary-label">LOW / MODERATE RISK</div>
             </div>
 

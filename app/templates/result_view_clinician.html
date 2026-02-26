@@ -1,29 +1,130 @@
 {% extends "base.html" %}
-
 {% block content %}
 
-<div class="result-container">
+<div class="clinical-result">
 
-    <h1>Risk Assessment Result</h1>
+    <!-- HEADER -->
+    <div class="result-header">
+        <h1>Clinical Risk Assessment</h1>
+        <div class="patient-meta">
+            Visit Date:
+            {{ visit.created_at.strftime("%Y-%m-%d") if visit.created_at else "-" }}
+        </div>
+    </div>
 
-    <div class="result-card">
 
-        <p><strong>Patient ID:</strong> {{ visit.patient_id }}</p>
-        <p><strong>Systolic BP:</strong> {{ visit.systolic_bp }}</p>
-        <p><strong>Diastolic BP:</strong> {{ visit.diastolic_bp }}</p>
-        <p><strong>Fasting Glucose:</strong> {{ visit.fasting_glucose }}</p>
-        <p><strong>BMI:</strong> {{ visit.bmi }}</p>
+    <!-- SCORE SECTION -->
+    <div class="score-card">
 
-        <hr>
+        <div class="score-left">
+            <div class="score-percent">
+                {{ (visit.risk_score * 33) | round(0) }}%
+            </div>
+            <div class="score-label">
+                {{ visit.risk_level }}
+            </div>
+        </div>
 
-        <h2>Risk Score: {{ visit.risk_score }}</h2>
-        <h2>Risk Level: {{ visit.risk_level }}</h2>
+        <div class="score-bar-wrapper">
+            <div class="score-bar">
+                <div class="score-bar-fill
+                    {% if visit.risk_level == 'HIGH' %}
+                        high
+                    {% elif visit.risk_level == 'MODERATE' %}
+                        moderate
+                    {% else %}
+                        low
+                    {% endif %}
+                "
+                style="width: {{ (visit.risk_score * 33) | round(0) }}%;">
+                </div>
+            </div>
+        </div>
 
     </div>
 
-    <a href="/clinician/dashboard" class="btn-back">
-        ← Back to Dashboard
-    </a>
+
+    <!-- RISK FACTORS TABLE -->
+    <div class="section">
+        <h2>Risk Factors Overview</h2>
+
+        <table class="risk-table">
+            <tr>
+                <th>Factor</th>
+                <th>Value</th>
+                <th>Risk Trigger</th>
+            </tr>
+
+            <tr>
+                <td>Systolic BP</td>
+                <td>{{ visit.systolic_bp }}</td>
+                <td>
+                    {% if visit.systolic_bp and visit.systolic_bp >= 140 %}
+                        ✓ High
+                    {% else %}
+                        Normal
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Fasting Glucose</td>
+                <td>{{ visit.fasting_glucose }}</td>
+                <td>
+                    {% if visit.fasting_glucose and visit.fasting_glucose >= 126 %}
+                        ✓ High
+                    {% else %}
+                        Normal
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <td>BMI</td>
+                <td>{{ visit.bmi }}</td>
+                <td>
+                    {% if visit.bmi and visit.bmi >= 30 %}
+                        ✓ Obese
+                    {% else %}
+                        Normal
+                    {% endif %}
+                </td>
+            </tr>
+
+        </table>
+    </div>
+
+
+    <!-- CLINICAL RECOMMENDATION -->
+    <div class="section recommendation">
+
+        <h2>Clinical Recommendation</h2>
+
+        {% if visit.risk_level == "HIGH" %}
+            <div class="alert high">
+                Immediate lifestyle intervention and clinical evaluation recommended.
+            </div>
+
+        {% elif visit.risk_level == "MODERATE" %}
+            <div class="alert moderate">
+                Monitor closely. Recommend dietary control and follow-up within 3 months.
+            </div>
+
+        {% else %}
+            <div class="alert low">
+                Maintain healthy lifestyle. Annual follow-up sufficient.
+            </div>
+        {% endif %}
+
+    </div>
+
+
+    <!-- FOOTER -->
+    <div class="result-footer">
+        <a href="/clinician/dashboard" class="btn-primary">
+            Back to Dashboard
+        </a>
+    </div>
 
 </div>
 
