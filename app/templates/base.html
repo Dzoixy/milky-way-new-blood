@@ -6,15 +6,15 @@
 
 <link rel="stylesheet" href="/static/css/base.css">
 
-{% if active == 'dashboard' %}
+{% if active_tab == 'dashboard' %}
 <link rel="stylesheet" href="/static/css/dashboard.css">
 {% endif %}
 
-{% if active == 'new' %}
+{% if active_tab == 'new' %}
 <link rel="stylesheet" href="/static/css/new_patient.css">
 {% endif %}
 
-{% if active == 'health' or active == 'results' %}
+{% if active_tab == 'health' or active_tab == 'results' %}
 <link rel="stylesheet" href="/static/css/patient.css">
 {% endif %}
 
@@ -33,21 +33,21 @@
 
         {% if role == "clinician" %}
             <a href="/clinician/dashboard"
-               class="{% if active_tab=='dashboard' %}active{% endif %}">
+               class="{% if active_tab == 'dashboard' %}active{% endif %}">
                DASHBOARD
             </a>
             <a href="/clinician/new-patient"
-               class="{% if active_tab=='new' %}active{% endif %}">
+               class="{% if active_tab == 'new' %}active{% endif %}">
                NEW PATIENT
             </a>
 
         {% elif role == "patient" %}
             <a href="/patient/health"
-               class="{% if active_tab=='health' %}active{% endif %}">
+               class="{% if active_tab == 'health' %}active{% endif %}">
                MY HEALTH
             </a>
             <a href="/patient/results"
-               class="{% if active_tab=='results' %}active{% endif %}">
+               class="{% if active_tab == 'results' %}active{% endif %}">
                MY RESULTS
             </a>
         {% endif %}
@@ -56,7 +56,7 @@
 
     <div class="user">
         <span class="user-name">{{ user_name }}</span>
-        <a href="/login" class="logout">LOG OUT</a>
+        <a href="/logout" class="logout">LOG OUT</a>
     </div>
 
 </header>

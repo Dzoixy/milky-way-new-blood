@@ -21,7 +21,8 @@ def clinician_context(request: Request, active: str):
         "request": request,
         "active_tab": active,
         "user_name": request.session.get("user_name"),
-        "organization_id": request.session.get("organization_id")
+        "organization_id": request.session.get("organization_id"),
+        "role": request.session.get("role"),  # สำคัญมาก
     }
 
 
@@ -56,7 +57,7 @@ async def clinician_dashboard(request: Request):
 
 
 # ======================================================
-# NEW PATIENT
+# NEW PATIENT (MULTI STEP)
 # ======================================================
 
 @router.get("/new-patient")
@@ -87,7 +88,7 @@ async def new_patient_form(request: Request):
 
 
 # ======================================================
-# STEP A
+# STEP A — CREATE PATIENT
 # ======================================================
 
 @router.post("/new-patient/create")
@@ -107,6 +108,7 @@ async def create_patient(
     dob = datetime.strptime(date_of_birth, "%Y-%m-%d").date()
 
     async with AsyncSessionLocal() as db:
+
         new_patient = Patient(
             full_name=full_name.strip(),
             national_id=national_id.strip(),
@@ -127,7 +129,7 @@ async def create_patient(
 
 
 # ======================================================
-# STEP B
+# STEP B — SAVE VITAL SIGNS
 # ======================================================
 
 @router.post("/save-vitals")
@@ -145,7 +147,6 @@ async def save_vitals(
 
     async with AsyncSessionLocal() as db:
 
-        # เช็ค patient ว่าอยู่ใน org นี้จริง
         result = await db.execute(
             select(Patient).where(
                 Patient.id == patient_id,
@@ -177,7 +178,7 @@ async def save_vitals(
 
 
 # ======================================================
-# STEP C
+# STEP C — SAVE LIFESTYLE
 # ======================================================
 
 @router.post("/save-lifestyle")
@@ -217,7 +218,7 @@ async def save_lifestyle(
 
 
 # ======================================================
-# STEP D
+# STEP D — SAVE MEDICAL + CALCULATE RISK
 # ======================================================
 
 @router.post("/save-medical")
@@ -280,7 +281,7 @@ async def save_medical(
 
 
 # ======================================================
-# RESULT
+# RESULT PAGE
 # ======================================================
 
 @router.get("/result/{visit_id}")
@@ -301,7 +302,7 @@ async def view_result(request: Request, visit_id: int):
     if not visit:
         return RedirectResponse("/clinician/dashboard", status_code=303)
 
-    context = clinician_context(request, "dashboard")
+    context = clinician_context(request, "results")  # สำคัญมาก
     context["visit"] = visit
 
     return templates.TemplateResponse(
